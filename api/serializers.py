@@ -4,14 +4,14 @@ from movie.models import Movie
 
 class ListMovieSerializer(serializers.ModelSerializer):
 
-    rating_star = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Movie
-        fields = ('Movie_Name', 'Year', 'Timing', 'Rating', 'Votes', 'Genre', 'Language', 'rating_star')
+        fields = ('ID', 'Movie_Name', 'Year', 'Timing', 'Rating', 'Votes', 'Genre', 'Language',)
 
+    def validate(self, attrs):
+        return super().validate(attrs)
     
-    def get_rating_star(self, obj):
-        if obj.Rating == '-':
-            return 'No star'
-        return '5 stars'
+    def create(self, validated_data):
+        return super().create(validated_data)
+
