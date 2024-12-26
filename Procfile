@@ -1,0 +1,1 @@
+web: gunicorn django_movie_api.wsgi:application --workers 3 --threads 2
