@@ -7,6 +7,8 @@
 
 This project is a Django-based web application that provides a RESTful API for managing a collection of movies. It uses Django Rest Framework to handle API requests and responses.
 
+For the time being this project is available at http://softgenie.org/api/movies but might be taken down in the future.
+
 ## Features
 
 - Add, update, delete, and retrieve movies
@@ -61,8 +63,6 @@ This project is a Django-based web application that provides a RESTful API for m
     python manage.py runserver
     ```
 
-## Usage
-
 ## Deployment
 
 Install guvicorn server on your server
@@ -75,7 +75,6 @@ pip install guvicorn
 gunicorn django_movie_api.wsgi:application 
 ```
 
-```
 To run the Gunicorn application in the background using `nohup`, use the following command:
 
 Bash 
@@ -83,6 +82,8 @@ Bash
 ```
 nohup gunicorn django_movie_api.wsgi:application &
 ```
+
+Deployment through a service is in progress and would be added in near future. Also working on SSL implementation on the server.
 
 To kill the application running through nohup use grep, search the process ID of the running application and kill it.
 
