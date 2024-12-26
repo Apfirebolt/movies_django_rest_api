@@ -242,6 +242,45 @@ Start supervisord using the following command
 supervisord -c /home/movies_django_rest_api/supervisord.conf
 ```
 
+*** Some useful commands using Supervisord
+
+Here are some useful Supervisor commands:
+
+- `supervisorctl status`: Displays the status of all supervised processes (running, stopped, starting, etc.).
+- `supervisorctl start <program_name>`: Starts a specific program.
+- `supervisorctl stop <program_name>`: Stops a specific program.
+- `supervisorctl restart <program_name>`: Restarts a specific program.
+- `supervisorctl reload`: Reloads the Supervisor configuration file. This is useful if you've made changes to the configuration.
+- `supervisorctl update`: Updates the status of all processes.
+- `supervisorctl clear <program_name>`: Clears the log files for a specific program.
+- `supervisorctl tail <program_name>`: Displays the last part of the log file for a specific program.
+- `supervisorctl add <program_name>`: Adds a new program to be supervised.
+- `supervisorctl remove <program_name>`: Removes a program from Supervisor's control.
+- `supervisorctl shutdown`: Shuts down the Supervisor process.
+
+Example commands for this application :
+
+```
+supervisorctl start django_movie_api
+supervisorctl stop django_movie_api
+```
+
+Using the supervisorctl tool:
+
+Access the Supervisor control interface:
+
+Bash
+
+supervisorctl
+Execute commands:
+
+supervisor> status 
+supervisor> start my_django_app 
+supervisor> stop my_django_app
+Remember to replace <program_name> with the actual name of your program as defined in your Supervisor configuration file.
+
+These commands provide you with the basic tools to manage and monitor your processes using Supervisor. For a complete list of commands and their options, refer to the official Supervisor documentation.
+
 ## Contributing
 
 1. Fork the repository
