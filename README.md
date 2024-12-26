@@ -63,6 +63,35 @@ This project is a Django-based web application that provides a RESTful API for m
 
 ## Usage
 
+## Deployment
+
+Install guvicorn server on your server
+
+```
+pip install guvicorn
+```
+
+```
+gunicorn django_movie_api.wsgi:application 
+```
+
+```
+To run the Gunicorn application in the background using `nohup`, use the following command:
+
+Bash 
+
+```
+nohup gunicorn django_movie_api.wsgi:application &
+```
+
+To kill the application running through nohup use grep, search the process ID of the running application and kill it.
+
+```
+ps aux | grep "gunicorn django_movie_api.wsgi:application" | grep -v grep 
+
+kill PID
+```
+
 - Access the API at `http://127.0.0.1:8000/api/movies/`
 - Use the Django admin interface at `http://127.0.0.1:8000/admin/` to manage movies
 

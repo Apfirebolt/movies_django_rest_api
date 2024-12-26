@@ -122,4 +122,37 @@ class PublicMovieApiTests(TestCase):
         movie.refresh_from_db()
         self.assertEqual(movie.Movie_Name, payload["Movie_Name"])
         self.assertEqual(movie.Year, payload["Year"])
+
+    def test_invalid_movie(self):
+        """Test creating a movie with invalid payload"""
+        payload = {
+            "ID": 1,
+            "Movie_Name": "ABC",
+            "Year": 1994,
+            "Timing": 142,
+            "Rating": 9.3,
+            "Votes": 2345,
+            "Genre": "Drama",
+            "Language": "English",
+        }
+        res = self.client.post(movies_url(), payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        print(res.data)
+
+    
+    def test_invalid_movie_year(self):
+        """Test creating a movie with invalid year"""
+        payload = {
+            "ID": 1,
+            "Movie_Name": "The Shawshank Redemption",
+            "Year": 1800,
+            "Timing": 142,
+            "Rating": 9.3,
+            "Votes": 2345,
+            "Genre": "Drama",
+            "Language": "English",
+        }
+        res = self.client.post(movies_url(), payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        print(res.data)
         
