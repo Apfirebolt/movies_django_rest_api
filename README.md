@@ -104,6 +104,93 @@ kill PID
 - `PUT /api/movies/{id}/` - Update a specific movie
 - `DELETE /api/movies/{id}/` - Delete a specific movie
 
+## Adding SSL
+
+Install certbot and Nginx
+
+```
+sudo apt install python3-certbot-nginx
+```
+
+Generate certbot certificate by specifying your domain name.
+
+```
+sudo certbot --nginx -d softgenie.org -d www.softgenie.org
+```
+
+The message which you should get after successful generation of certificate
+
+```
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/softgenie.org/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/softgenie.org/privkey.pem
+This certificate expires on 2025-03-26.
+These files will be updated when the certificate renews.
+Certbot has set up a scheduled task to automatically renew this certificate in the background.
+
+Deploying certificate
+Successfully deployed certificate for softgenie.org to /etc/nginx/sites-enabled/default
+Successfully deployed certificate for www.softgenie.org to /etc/nginx/sites-enabled/default
+Congratulations! You have successfully enabled HTTPS on https://softgenie.org and https://www.softgenie.org
+```
+
+Next step is to make changes in the Nginx config file which should be inside. Create a new Nginx server block.
+
+```
+sudo nano /etc/nginx/sites-available/softgenie.org
+```
+
+```
+server {
+    listen 80;
+    server_name softgenie.org www.softgenie.org;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name softgenie.org www.softgenie.org;
+
+    ssl_certificate /etc/letsencrypt/live/softgenie.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/softgenie.org/privkey.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+}
+```
+
+Create a symlink to enable the server block
+
+```
+sudo ln -s /etc/nginx/sites-available/sofgenie.org.com /etc/nginx/sites-enabled/
+```
+
+Test the nginx conf file with this command.
+
+```
+sudo nginx -t
+```
+
+Got the following log messages 
+
+```
+2024/12/26 11:16:59 [warn] 22878#22878: conflicting server name "softgenie.org" on 0.0.0.0:80, ignored
+2024/12/26 11:16:59 [warn] 22878#22878: conflicting server name "www.softgenie.org" on 0.0.0.0:80, ignored
+2024/12/26 11:16:59 [warn] 22878#22878: conflicting server name "softgenie.org" on 0.0.0.0:443, ignored
+2024/12/26 11:16:59 [warn] 22878#22878: conflicting server name "www.softgenie.org" on 0.0.0.0:443, ignored
+```
+
+Restart Nginx and confirm the status
+
+```
+sudo systemctl restart nginx
+sudo systemctl status nginx
+```
+
 ## Contributing
 
 1. Fork the repository
