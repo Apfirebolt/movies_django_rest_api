@@ -41,15 +41,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Add the rest_framework to the list of installed apps
+    'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
     'drf_spectacular',
+    'django_filters',
 
     # Add the movie app to the list of installed apps
+    'accounts',
     'movie',
     'api'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -60,6 +65,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_movie_api.urls'
+
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 TEMPLATES = [
     {
