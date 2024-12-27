@@ -40,11 +40,10 @@ class ListCustomUsersApiView(ListAPIView):
 class ListMovieApiView(ListCreateAPIView):
     serializer_class = ListMovieSerializer
     queryset = Movie.objects.all()
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = ListMovieSerializer(queryset, many=True)
-        return Response(serializer.data)
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['Movie_Name', 'Year', 'Genre']
+    ordering_fields = ['Votes', 'Movie_Name']
+    search_fields = ['Movie_Name',]
 
     def create(self, request, *args, **kwargs):
         serializer = ListMovieSerializer(data=request.data)
@@ -82,11 +81,10 @@ class ListGameApiView(ListCreateAPIView):
 
     serializer_class = ListGameSerializer
     queryset = Game.objects.all()
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = ListGameSerializer(queryset, many=True)
-        return Response(serializer.data)
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['title', 'developer', 'console']
+    ordering_fields = ['title', 'developer']
+    search_fields = ['title', 'developer', 'console']
 
     def create(self, request, *args, **kwargs):
         serializer = ListGameSerializer(data=request.data)
