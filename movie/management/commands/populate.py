@@ -10,7 +10,7 @@ class Command(BaseCommand):
         df = pd.read_csv("data/movies.csv")
 
         item_count = 1
-        for index, row in df.head(100).iterrows():
+        for index, row in df.head(2000).iterrows():
             try:
                 rating = row["Rating(10)"] if row["Rating(10)"] != '-' else None
                 current_movie = Movie(

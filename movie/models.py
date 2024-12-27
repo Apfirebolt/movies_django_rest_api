@@ -25,6 +25,14 @@ class Game(models.Model):
     genre = models.CharField(max_length=50)
     publisher = models.CharField(max_length=100)
     developer = models.CharField(max_length=100)
+    critic_score = models.FloatField(null=True, blank=True)
+    total_sales = models.FloatField(null=True, blank=True)
+    na_sales = models.FloatField(null=True, blank=True)
+    jp_sales = models.FloatField(null=True, blank=True)
+    pal_sales = models.FloatField(null=True, blank=True)
+    other_sales = models.FloatField(null=True, blank=True)
+    release_date = models.CharField(max_length=50,null=True, blank=True)
+    last_update = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return self.title

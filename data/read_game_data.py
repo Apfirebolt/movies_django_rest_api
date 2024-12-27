@@ -5,7 +5,6 @@ file_path = 'data/vgchartz_games.csv'
 data = pd.read_csv(file_path)
 
 # Print the first 10 rows
-print(data.head(10))
-
+print(data.iloc[:, -6:].head(10))
 # Print all the columns of the data
 print(data.columns)
