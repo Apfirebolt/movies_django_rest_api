@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from movie.models import Movie
+from movie.models import Movie, Game
 
 
 class ListMovieSerializer(serializers.ModelSerializer):
@@ -21,4 +21,11 @@ class ListMovieSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         return super().create(validated_data)
+    
+
+class ListGameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Game
+        fields = '__all__'
 
