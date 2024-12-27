@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,15 +42,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Add the rest_framework to the list of installed apps
+    'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
     'drf_spectacular',
+    'django_filters',
 
     # Add the movie app to the list of installed apps
+    'accounts',
     'movie',
     'api'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -60,6 +66,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_movie_api.urls'
+
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 TEMPLATES = [
     {
@@ -124,7 +132,18 @@ SPECTACULAR_SETTINGS = {
 }
 
 REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 50,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    
+    "AUTH_HEADER_TYPES": ("Bearer", ),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
 
 
