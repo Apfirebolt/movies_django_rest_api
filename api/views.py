@@ -13,6 +13,7 @@ from .serializers import (
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import filters
+from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from accounts.models import CustomUser
 from rest_framework.response import Response
@@ -127,7 +128,6 @@ class ListBlogApiView(ListAPIView):
 
     serializer_class = ListBlogSerializer
     queryset = Blog.objects.all()
-    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = ['title', 'author']
     ordering_fields = ['date_posted', 'title']
@@ -138,7 +138,7 @@ class CreateBlogApiView(CreateAPIView):
 
     serializer_class = ListBlogSerializer
     queryset = Blog.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = ListBlogSerializer(data=request.data)
@@ -176,7 +176,7 @@ class CreateBlogPostApiView(CreateAPIView):
 
     serializer_class = ListBlogPostSerializer
     queryset = BlogPost.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = ListBlogPostSerializer(data=request.data)
@@ -190,7 +190,6 @@ class ListBlogPostApiView(ListAPIView):
 
     serializer_class = ListBlogPostSerializer
     queryset = BlogPost.objects.all()
-    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = ['title', 'author']
     ordering_fields = ['date_posted', 'title']

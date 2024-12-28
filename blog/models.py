@@ -45,7 +45,7 @@ class PostImage(models.Model):
     order = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.post.title
+        return self.post.title + '-' + self.caption
     
     class Meta:
         db_table = 'post_image_table'
@@ -58,7 +58,7 @@ class BlogImage(models.Model):
     order = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.blog.title
+        return self.blog.title + '-' + self.caption
     
     class Meta:
         db_table = 'blog_image_table'

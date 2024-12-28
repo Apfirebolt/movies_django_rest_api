@@ -90,17 +90,29 @@ class ListGameSerializer(serializers.ModelSerializer):
 
 
 class ListBlogSerializer(serializers.ModelSerializer):
+
+    images = serializers.SerializerMethodField()
     
     class Meta:
         model = Blog
         fields = '__all__'
 
+    def get_images(self, obj):
+        images = obj.images.all()
+        return ListBlogImageSerializer(images, many=True).data
+
 
 class ListBlogPostSerializer(serializers.ModelSerializer):
+
+    images = serializers.SerializerMethodField()
     
     class Meta:
         model = BlogPost
         fields = '__all__'
+
+    def get_images(self, obj):
+        images = obj.images.all()
+        return ListPostImageSerializer(images, many=True).data
 
 
 class ListPostImageSerializer(serializers.ModelSerializer):
