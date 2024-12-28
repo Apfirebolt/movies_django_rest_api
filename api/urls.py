@@ -13,6 +13,9 @@ from .views import (
     DetailBlogPostApiView,
     CreateBlogImageApiView,
     CreatePostImageApiView,
+    CreateProjectApiView,
+    ListProjectApiView,
+    ProjectDetailApiView
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -31,6 +34,9 @@ urlpatterns = [
     path("blog-posts/add", CreateBlogPostApiView.as_view(), name="add-blog-posts"),
     path("blog-images", CreateBlogImageApiView.as_view(), name="create-blog-images"),
     path("post-images", CreatePostImageApiView.as_view(), name="create-post-images"),
+    path("projects", ListProjectApiView.as_view(), name="list-projects"),
+    path("projects/add", CreateProjectApiView.as_view(), name="add-projects"),
+    path("projects/<int:pk>", ProjectDetailApiView.as_view(), name="detail-projects"),
     path("movies", ListMovieApiView.as_view(), name="list-create-movies"),
     path("movies/<int:pk>", DetailMovieApiView.as_view(), name="detail-movies"),
     path("games", ListGameApiView.as_view(), name="list-create-games"),

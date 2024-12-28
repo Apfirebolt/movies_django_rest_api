@@ -63,6 +63,37 @@ class BlogImage(models.Model):
     class Meta:
         db_table = 'blog_image_table'
 
+
+class Project(models.Model):
+    title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField()
+    author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='projects', null=True, blank=True)
+    meta_title = models.CharField(max_length=100, null=True, blank=True)
+    meta_description = models.TextField(null=True, blank=True)
+    date_posted = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    is_published = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        db_table = 'project_table'
+
+
+class ProjectImages(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='images')
+    caption = models.CharField(max_length=100, null=True, blank=True)
+    image = models.ImageField(upload_to='images/project')
+    order = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.project.title + '-' + self.caption
+    
+    class Meta:
+        db_table = 'project_image_table'
+
     
 
     

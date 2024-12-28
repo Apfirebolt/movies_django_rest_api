@@ -8,7 +8,9 @@ from .serializers import (
     ListBlogSerializer,
     ListBlogPostSerializer,
     ListPostImageSerializer,
-    ListBlogImageSerializer
+    ListBlogImageSerializer,
+    ListProjectSerializer,
+    ListProjectImageSerializer
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -18,7 +20,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from accounts.models import CustomUser
 from rest_framework.response import Response
 from movie.models import Movie, Game
-from blog.models import Blog, BlogPost, PostImage, BlogImage
+from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages
 
 
 class CreateCustomUserApiView(CreateAPIView):
@@ -246,3 +248,66 @@ class CreateBlogImageApiView(CreateAPIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+
+class ListProjectApiView(ListAPIView):
+
+    serializer_class = ListProjectSerializer
+    queryset = Project.objects.all()
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['title', 'author']
+    ordering_fields = ['date_posted', 'title']
+    search_fields = ['title', 'author']
+
+
+class CreateProjectApiView(CreateAPIView):
+
+    serializer_class = ListProjectSerializer
+    queryset = Project.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = ListProjectSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+
+class ProjectDetailApiView(RetrieveUpdateDestroyAPIView):
+
+    serializer_class = ListProjectSerializer
+    queryset = Project.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ListProjectSerializer(instance)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ListProjectSerializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=204)
+    
+
+class AddProjectImageApiView(CreateAPIView):
+
+    serializer_class = ListProjectImageSerializer
+    queryset = ProjectImages.objects.all()
+    permission_classes = []
+
+    def create(self, request, *args, **kwargs):
+        serializer = ListProjectImageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
