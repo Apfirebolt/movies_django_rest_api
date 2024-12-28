@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from movie.models import Movie, Game
 from accounts.models import CustomUser
+from blog.models import Blog, BlogPost, PostImage, BlogImage
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -85,4 +86,32 @@ class ListGameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Game
+        fields = '__all__'
+
+
+class ListBlogSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Blog
+        fields = '__all__'
+
+
+class ListBlogPostSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = BlogPost
+        fields = '__all__'
+
+
+class ListPostImageSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = PostImage
+        fields = '__all__'
+
+
+class ListBlogImageSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = BlogImage
         fields = '__all__'

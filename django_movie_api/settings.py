@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # Add the movie app to the list of installed apps
     'accounts',
     'movie',
+    'blog',
     'api'
 ]
 
