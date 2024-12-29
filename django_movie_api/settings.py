@@ -30,6 +30,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['206.81.29.244', 'localhost', 'http://softgenie.org', 'softgenie.org', 'www.softgenie.org']
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:8080",
+    "http://localhost:4200",
+]
 
 # Application definition
 
