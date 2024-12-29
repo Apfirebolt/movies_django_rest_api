@@ -94,6 +94,51 @@ class ProjectImages(models.Model):
     class Meta:
         db_table = 'project_image_table'
 
+
+class GalleryPost(models.Model):
+    title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField()
+    author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='gallery_posts', null=True, blank=True)
+    meta_title = models.CharField(max_length=100, null=True, blank=True)
+    meta_description = models.TextField(null=True, blank=True)
+    date_posted = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    is_published = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        db_table = 'gallery_post_table'
+
+
+class GalleryPostImages(models.Model):
+
+    post = models.ForeignKey(GalleryPost, on_delete=models.CASCADE, related_name='images')
+    caption = models.CharField(max_length=100, null=True, blank=True)
+    image = models.ImageField(upload_to='images/gallery_post')
+    order = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.post.title + '-' + self.caption
+    
+    class Meta:
+        db_table = 'gallery_post_image_table'
+
+
+class Tags(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        db_table = 'tags_table'
+
     
 
     

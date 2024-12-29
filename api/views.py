@@ -10,7 +10,10 @@ from .serializers import (
     ListPostImageSerializer,
     ListBlogImageSerializer,
     ListProjectSerializer,
-    ListProjectImageSerializer
+    ListProjectImageSerializer,
+    ListGalleryPostSerializer,
+    ListGalleryPostImageSerializer,
+    TagsSerializer
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -20,7 +23,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from accounts.models import CustomUser
 from rest_framework.response import Response
 from movie.models import Movie, Game
-from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages
+from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPost, GalleryPostImage
 
 
 class CreateCustomUserApiView(CreateAPIView):
@@ -306,6 +309,106 @@ class AddProjectImageApiView(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = ListProjectImageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
+
+class ListCreateTagsApiView(ListCreateAPIView):
+
+    serializer_class = TagsSerializer
+    queryset = Tags.objects.all()
+    permission_classes = []
+
+    def create(self, request, *args, **kwargs):
+        serializer = TagsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
+
+class TagDetailApiView(RetrieveUpdateDestroyAPIView):
+
+    serializer_class = TagsSerializer
+    queryset = Tags.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = TagsSerializer(instance)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = TagsSerializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=204)
+    
+
+class ListGalleryPostApiView(ListAPIView):
+
+    serializer_class = ListGalleryPostSerializer
+    queryset = GalleryPost.objects.all()
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['title', 'author']
+    ordering_fields = ['date_posted', 'title']
+    search_fields = ['title', 'author']
+
+
+class CreateGalleryPostApiView(CreateAPIView):
+
+    serializer_class = ListGalleryPostSerializer
+    queryset = GalleryPost.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = ListGalleryPostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
+
+class GalleryPostDetailApiView(RetrieveUpdateDestroyAPIView):
+
+    serializer_class = ListGalleryPostSerializer
+    queryset = GalleryPost.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ListGalleryPostSerializer(instance)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ListGalleryPostSerializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=204)
+    
+
+class AddGalleryPostImageApiView(CreateAPIView):
+
+    serializer_class = ListGalleryPostImageSerializer
+    queryset = GalleryPostImage.objects.all()
+    permission_classes = []
+
+    def create(self, request, *args, **kwargs):
+        serializer = ListGalleryPostImageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)

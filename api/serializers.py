@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from movie.models import Movie, Game
 from accounts.models import CustomUser
-from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages
+from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, GalleryPost, GalleryPostImages, Tags
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -147,3 +147,33 @@ class ListProjectSerializer(serializers.ModelSerializer):
     def get_images(self, obj):
         images = obj.images.all()
         return ListProjectImageSerializer(images, many=True).data
+    
+
+class ListGalleryPostImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = GalleryPostImages
+        fields = '__all__'
+    
+
+class ListGalleryPostSerializer(serializers.ModelSerializer):
+
+    images = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = GalleryPost
+        fields = '__all__'
+
+    def get_images(self, obj):
+        images = obj.images.all()
+        return ListGalleryPostImageSerializer(images, many=True).data
+    
+
+class TagsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tags
+        fields = '__all__'
+
+
+    
