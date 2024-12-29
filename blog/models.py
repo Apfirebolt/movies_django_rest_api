@@ -11,6 +11,8 @@ class Blog(models.Model):
     meta_description = models.TextField(null=True, blank=True)
     date_posted = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    views = models.IntegerField(default=0)
+    tags = models.ManyToManyField('Tags', related_name='blogs', blank=True)
 
     def __str__(self):
         return self.title
@@ -30,6 +32,8 @@ class BlogPost(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=False)
+    views = models.IntegerField(default=0)
+    tags = models.ManyToManyField('Tags', related_name='blog_posts', blank=True)
 
     def __str__(self):
         return self.title
@@ -43,6 +47,7 @@ class PostImage(models.Model):
     caption = models.CharField(max_length=100, null=True, blank=True)
     image = models.ImageField(upload_to='images/post')
     order = models.IntegerField(default=0)
+    tags = models.ManyToManyField('Tags', related_name='post_images', blank=True)
 
     def __str__(self):
         return self.post.title + '-' + self.caption
@@ -56,6 +61,7 @@ class BlogImage(models.Model):
     caption = models.CharField(max_length=100, null=True, blank=True)
     image = models.ImageField(upload_to='images/blog')
     order = models.IntegerField(default=0)
+    tags = models.ManyToManyField('Tags', related_name='blog_images', blank=True)
 
     def __str__(self):
         return self.blog.title + '-' + self.caption
@@ -74,6 +80,8 @@ class Project(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=False)
+    views = models.IntegerField(default=0)
+    tags = models.ManyToManyField('Tags', related_name='projects', blank=True)
 
     def __str__(self):
         return self.title
@@ -87,6 +95,7 @@ class ProjectImages(models.Model):
     caption = models.CharField(max_length=100, null=True, blank=True)
     image = models.ImageField(upload_to='images/project')
     order = models.IntegerField(default=0)
+    tags = models.ManyToManyField('Tags', related_name='project_images', blank=True)
 
     def __str__(self):
         return self.project.title + '-' + self.caption
@@ -105,6 +114,8 @@ class GalleryPost(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=False)
+    views = models.IntegerField(default=0)
+    tags = models.ManyToManyField('Tags', related_name='gallery_posts', blank=True)
 
     def __str__(self):
         return self.title
@@ -119,6 +130,7 @@ class GalleryPostImages(models.Model):
     caption = models.CharField(max_length=100, null=True, blank=True)
     image = models.ImageField(upload_to='images/gallery_post')
     order = models.IntegerField(default=0)
+    tags = models.ManyToManyField('Tags', related_name='gallery_post_images', blank=True)
 
     def __str__(self):
         return self.post.title + '-' + self.caption

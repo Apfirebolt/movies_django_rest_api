@@ -23,7 +23,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from accounts.models import CustomUser
 from rest_framework.response import Response
 from movie.models import Movie, Game
-from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPost, GalleryPostImage
+from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPostImages, GalleryPost
 
 
 class CreateCustomUserApiView(CreateAPIView):
@@ -404,7 +404,7 @@ class GalleryPostDetailApiView(RetrieveUpdateDestroyAPIView):
 class AddGalleryPostImageApiView(CreateAPIView):
 
     serializer_class = ListGalleryPostImageSerializer
-    queryset = GalleryPostImage.objects.all()
+    queryset = GalleryPostImages.objects.all()
     permission_classes = []
 
     def create(self, request, *args, **kwargs):
