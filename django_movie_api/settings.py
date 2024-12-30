@@ -34,6 +34,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8080",
     "http://localhost:4200",
+    "https://nuxt-portfolio-beryl.vercel.app"
 ]
 
 # Application definition
