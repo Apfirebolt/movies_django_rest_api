@@ -89,9 +89,17 @@ class ListGameSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TagListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tags
+        fields = ('name',)
+
+
 class ListBlogSerializer(serializers.ModelSerializer):
 
     images = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
     
     class Meta:
         model = Blog
@@ -100,6 +108,10 @@ class ListBlogSerializer(serializers.ModelSerializer):
     def get_images(self, obj):
         images = obj.images.all()
         return ListBlogImageSerializer(images, many=True).data
+    
+    def get_tags(self, obj):
+        tags = obj.tags.all()
+        return TagListSerializer(tags, many=True).data
 
 
 class ListBlogPostSerializer(serializers.ModelSerializer):
@@ -139,6 +151,7 @@ class ListProjectImageSerializer(serializers.ModelSerializer):
 class ListProjectSerializer(serializers.ModelSerializer):
 
     images = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
     
     class Meta:
         model = Project
@@ -147,6 +160,10 @@ class ListProjectSerializer(serializers.ModelSerializer):
     def get_images(self, obj):
         images = obj.images.all()
         return ListProjectImageSerializer(images, many=True).data
+    
+    def get_tags(self, obj):
+        tags = obj.tags.all()
+        return TagListSerializer(tags, many=True).data
     
 
 class ListGalleryPostImageSerializer(serializers.ModelSerializer):
@@ -159,6 +176,7 @@ class ListGalleryPostImageSerializer(serializers.ModelSerializer):
 class ListGalleryPostSerializer(serializers.ModelSerializer):
 
     images = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
     
     class Meta:
         model = GalleryPost
@@ -168,12 +186,17 @@ class ListGalleryPostSerializer(serializers.ModelSerializer):
         images = obj.images.all()
         return ListGalleryPostImageSerializer(images, many=True).data
     
+    def get_tags(self, obj):
+        tags = obj.tags.all()
+        return TagListSerializer(tags, many=True).data
+    
 
 class TagsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tags
         fields = '__all__'
+
 
 
     

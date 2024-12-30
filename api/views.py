@@ -13,7 +13,7 @@ from .serializers import (
     ListProjectImageSerializer,
     ListGalleryPostSerializer,
     ListGalleryPostImageSerializer,
-    TagsSerializer
+    TagsSerializer,
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
