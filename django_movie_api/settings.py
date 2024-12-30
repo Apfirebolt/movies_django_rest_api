@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_spectacular',
     'django_filters',
+    'django_summernote',
 
     # Add the movie app to the list of installed apps
     'accounts',
