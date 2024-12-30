@@ -14,6 +14,7 @@ from .serializers import (
     ListGalleryPostSerializer,
     ListGalleryPostImageSerializer,
     TagsSerializer,
+    GenericImageSerializer
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -23,7 +24,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from accounts.models import CustomUser
 from rest_framework.response import Response
 from movie.models import Movie, Game
-from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPostImages, GalleryPost
+from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPostImages, GalleryPost, GenericImage
 
 
 class CreateCustomUserApiView(CreateAPIView):
@@ -413,4 +414,12 @@ class AddGalleryPostImageApiView(CreateAPIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+
+class GenericImageListApiView(ListAPIView):
+
+    serializer_class = GenericImageSerializer
+    queryset = GenericImage.objects.all()
+    
+    
     

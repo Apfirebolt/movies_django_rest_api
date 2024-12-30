@@ -191,3 +191,14 @@ class Tags(models.Model):
 
     class Meta:
         db_table = "tags_table"
+
+
+class GenericImage(models.Model):
+    caption = models.CharField(max_length=100, null=True, blank=True)
+    image = models.ImageField(upload_to="images/generic")
+
+    def __str__(self):
+        return self.caption
+
+    class Meta:
+        db_table = "generic_image_table"
