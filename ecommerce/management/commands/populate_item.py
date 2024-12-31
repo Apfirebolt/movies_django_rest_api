@@ -10,8 +10,6 @@ class Command(BaseCommand):
         
         df = pd.read_csv('data/myntra.csv')
 
-        result = df.head(10)
-
         for index, row in df.iterrows():
             try:
                 current_item = Item(

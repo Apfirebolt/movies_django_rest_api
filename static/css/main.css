@@ -3,10 +3,6 @@
     color: #333;
 }
 
-h1 {
-    color: red;
-}
-
 .register-form {
     margin: 1rem auto;
     padding: 1rem;
@@ -18,4 +14,55 @@ h1 {
 .nav-logo {
     font-size: 1.5rem;
     font-weight: bold;
+}
+
+.hero-body {
+    background-color: #07393c;
+    color: #f0edeeff;
+}
+
+.night-color {
+    color: #0a090cff !important;
+}
+
+.night-color-bg {
+    background-color: #0a090cff !important;
+}
+
+.day-color {
+    color: #f0edeeff !important;
+}
+
+.day-color-bg {
+    background-color: #f0edeeff !important;
+}
+
+.midnight-green {
+    color: #07393c !important;
+}
+
+.midnight-green-bg {
+    background-color: #07393c !important;
+}
+
+.caribbean-current {
+    color: #2c666e !important;
+}
+
+.caribbean-current-bg {
+    background-color: #2c666e !important;
+}
+
+.non-photo-blue {
+    color: #90ddf0 !important;
+}
+
+.non-photo-blue-bg {
+    background-color: #90ddf0 !important;
+}
+
+.navbar-start .navbar-item:hover {
+    background-color: #07393c;
+    color: #f0edeeff;
+    transition: 0.5s;
 }

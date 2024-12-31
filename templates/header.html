@@ -1,7 +1,7 @@
 {% load static %} 
 
 <header>
-    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+    <nav class="navbar day-color-bg" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item is-vcentered nav-logo" href="{% url 'home' %}">
                 Soft Genie
@@ -38,10 +38,10 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-light" href="{% url 'accounts:login' %}">
+                        <a class="button day-color night-color-bg" href="{% url 'accounts:login' %}">
                             Log in
                         </a>
-                        <a class="button is-dark" href="{% url 'accounts:register' %}">
+                        <a class="button is-light" href="{% url 'accounts:register' %}">
                             Sign up
                         </a>
                     </div>
