@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
+    'widget_tweaks',
     'drf_spectacular',
     'django_filters',
     'django_summernote',
