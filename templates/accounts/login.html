@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %} 
 {% block title %}
 Softgenie - Login
 {% endblock %}
@@ -12,14 +12,14 @@ Softgenie - Login
 </div>
 {% endfor %}
 {% endif %}
-
+{% include 'header.html' %}
 <div class="section">
     <div class="container">
         <div class="columns is-centered">
             <div class="column is-one-third">
                 <div class="box">
-                    <figure class="image is-128x128 is-centered">
-                        <img src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow">
+                    <figure class="image is-128x128" style="margin: 0 auto;">
+                        <img src="{% static 'images/logo.png' %}" alt="SoftGenie Logo">
                     </figure>
                     <h2 class="title is-3 has-text-centered">
                         Sign in to your account
@@ -67,4 +67,7 @@ Softgenie - Login
         </div>
     </div>
 </div>
+{% include 'footer.html' %}
 {% endblock %}
+
+

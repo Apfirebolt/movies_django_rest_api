@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+{% load static %}
 
 {% block title %}
 Softgenie - Create Account
@@ -13,42 +14,51 @@ Softgenie - Create Account
 </div>
 {% endfor %}
 {% endif %}
-
+{% include 'header.html' %}
 <div class="section">
     <div class="container">
         <h2 class="title is-3 has-text-centered">
             Sign up and create a new account
         </h2>
+        <form action="" method="post" enctype="multipart/form-data" class="box register-form">
+            <figure class="image is-128x128" style="margin: 0 auto;">
+                <img src="{% static 'images/logo.png' %}" alt="SoftGenie Logo">
+            </figure>
+            <p class="my-3">Please create an account or login with existing account to register</p>
+            {% csrf_token %}
+            {% for each_field in form %}
+            <div class="field">
+                <label class="label">{{ each_field.label }}</label>
+                <div class="control">
+                    {{ each_field|add_class:"input" }}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="field is-grouped is-grouped-centered">
+                <div class="control">
+                    <input type="submit" class="button is-link" name="submit" value="Submit Form">
+                </div>
+                <div class="control">
+                    <input type="reset" class="button is-light" name="reset" value="Reset Form">
+                </div>
+            </div>
+            <div class="field is-grouped is-grouped-centered">
+                <p class="control">
+                    Already a member? <a href="{% url 'accounts:login' %}">Login here</a>
+                </p>
+            </div>
+            {% if form.errors %}
+            <div class="notification is-danger">
+                <ul>
+                    {% for key,value in form.errors.items %}
+                    <li>{{ value|escape }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </form>
     </div>
-
-    <form action="" method="post" enctype="multipart/form-data" class="box">
-        <p class="my-3">Please create an account or login with existing account to register</p>
-        {% csrf_token %}
-        {% for each_field in form %}
-        <div class="field">
-            <label class="label">{{ each_field.label }}</label>
-            <div class="control">
-                {{ each_field|add_class:"input" }}
-            </div>
-        </div>
-        {% endfor %}
-        <div class="field is-grouped is-grouped-centered">
-            <div class="control">
-                <input type="submit" class="button is-link" name="submit" value="Submit Form">
-            </div>
-            <div class="control">
-                <input type="reset" class="button is-light" name="reset" value="Reset Form">
-            </div>
-        </div>
-        {% if form.errors %}
-        <div class="notification is-danger">
-            <ul>
-                {% for key,value in form.errors.items %}
-                <li>{{ value|escape }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-    </form>
 </div>
+
+{% include 'footer.html' %}
 {% endblock %}

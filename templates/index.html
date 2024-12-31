@@ -1,38 +1,13 @@
 {% extends 'base.html' %} 
 {% load static %} 
-{% block title %} Django Movies - Home 
+{% block title %} Softgenie - Home 
 {% endblock %} 
 
 {% block content %}
 
 <body>
-  <section class="hero is-fullheight is-default is-bold">
-    <div class="hero-head">
-      <nav class="navbar">
-        <div class="container">
-          <div class="navbar-brand">
-            <a class="navbar-item" href="../">
-              <img src="https://bulma.io/images/bulma-logo.png" alt="Logo" />
-            </a>
-            <span class="navbar-burger burger" data-target="navbarMenu">
-              <span></span>
-              <span></span>
-              <span></span>
-            </span>
-          </div>
-          <div id="navbarMenu" class="navbar-menu">
-            <div class="navbar-end">
-              <div class="tabs is-right">
-                <ul>
-                  <li class="is-active"><a>Home</a></li>
-                  <li><a href="">Examples</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-    </div>
+  {% include 'header.html' %}
+  <section class="home hero is-fullheight is-default is-bold">
     <div class="hero-body">
       <div class="container has-text-centered">
         <div class="columns is-vcentered">
@@ -45,19 +20,20 @@
             </figure>
           </div>
           <div class="column is-6 is-offset-1">
-            <h1 class="title is-2">Django Movies API</h1>
+            <h1 class="title is-2">Welcome to Django Movies API</h1>
             <h2 class="subtitle is-4">
-              This is a sample template in Bulma which can be used to extend
-              this app with Jinja templates. Right now, it only serves as an API
-              and expects front-end to be written in React, Angular or Vue.
+              Explore the world of movies with our comprehensive API. Whether you are a developer or a movie enthusiast, our platform offers a wide range of features to enhance your experience.
             </h2>
             <br />
+            <p class="has-text-left">
+              Discover new movies, read reviews, and manage your favorite lists. Our API is designed to be easily integrated with various front-end frameworks, making it a perfect choice for your next project.
+            </p>
           </div>
         </div>
       </div>
     </div>
-    {% include 'footer.html' %}
   </section>
+  {% include 'footer.html' %}
 </body>
 
 {% endblock %}

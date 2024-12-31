@@ -1,0 +1,21 @@
+.home h2 {
+    margin: 1rem auto;
+    color: #333;
+}
+
+h1 {
+    color: red;
+}
+
+.register-form {
+    margin: 1rem auto;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 50%;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}

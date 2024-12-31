@@ -151,7 +151,7 @@ class DetailBlogApiView(RetrieveUpdateDestroyAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.view += 1
+        instance.views += 1
         instance.save()
         serializer = ListBlogSerializer(instance)
         return Response(serializer.data)
