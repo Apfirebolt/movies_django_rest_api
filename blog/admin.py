@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from .models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPost, GalleryPostImages
+from .models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPost, GalleryPostImages, GenericImage
 
 
 class BlogAdmin(SummernoteModelAdmin):
@@ -37,3 +37,4 @@ admin.site.register(ProjectImages)
 admin.site.register(Tags)
 admin.site.register(GalleryPost, GalleryPostAdmin)
 admin.site.register(GalleryPostImages)
+admin.site.register(GenericImage)

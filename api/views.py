@@ -145,7 +145,7 @@ class CreateBlogApiView(CreateAPIView):
 
 
 class DetailBlogApiView(RetrieveUpdateDestroyAPIView):
-    authentication_classes = []
+    authentication_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ListBlogSerializer
     queryset = Blog.objects.all()
 
@@ -196,6 +196,7 @@ class ListBlogPostApiView(ListAPIView):
 
 class DetailBlogPostApiView(RetrieveUpdateDestroyAPIView):
 
+    authentication_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ListBlogPostSerializer
     queryset = BlogPost.objects.all()
 
@@ -272,6 +273,7 @@ class CreateProjectApiView(CreateAPIView):
 
 class ProjectDetailApiView(RetrieveUpdateDestroyAPIView):
 
+    authentication_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ListProjectSerializer
     queryset = Project.objects.all()
 
@@ -300,7 +302,7 @@ class AddProjectImageApiView(CreateAPIView):
 
     serializer_class = ListProjectImageSerializer
     queryset = ProjectImages.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = ListProjectImageSerializer(data=request.data)
@@ -314,7 +316,7 @@ class ListCreateTagsApiView(ListCreateAPIView):
 
     serializer_class = TagsSerializer
     queryset = Tags.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = TagsSerializer(data=request.data)
@@ -326,6 +328,7 @@ class ListCreateTagsApiView(ListCreateAPIView):
 
 class TagDetailApiView(RetrieveUpdateDestroyAPIView):
 
+    authentication_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = TagsSerializer
     queryset = Tags.objects.all()
 
@@ -374,6 +377,7 @@ class CreateGalleryPostApiView(CreateAPIView):
 
 class GalleryPostDetailApiView(RetrieveUpdateDestroyAPIView):
 
+    authentication_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ListGalleryPostSerializer
     queryset = GalleryPost.objects.all()
 
@@ -402,7 +406,7 @@ class AddGalleryPostImageApiView(CreateAPIView):
 
     serializer_class = ListGalleryPostImageSerializer
     queryset = GalleryPostImages.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = ListGalleryPostImageSerializer(data=request.data)
@@ -416,6 +420,7 @@ class GenericImageListApiView(ListAPIView):
 
     serializer_class = GenericImageSerializer
     queryset = GenericImage.objects.all()
+    permission_classes = [IsAuthenticated]
     
     
     
