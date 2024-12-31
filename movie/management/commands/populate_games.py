@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         df = pd.read_csv("data/vgchartz_games.csv")
 
-        for index, row in df.head(100).iterrows():
+        for index, row in df.iloc[64001:].iterrows():
             try:
                 current_game = Game(
                     img=row.get("img"),

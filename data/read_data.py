@@ -8,4 +8,4 @@ data = pd.read_csv(file_path)
 print(data.head(10))
 
 # Print all the columns of the data
-print(data.columns)
+print(data.shape)

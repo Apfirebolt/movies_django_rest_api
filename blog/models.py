@@ -81,6 +81,7 @@ class BlogImage(models.Model):
 
     class Meta:
         db_table = "blog_image_table"
+        verbose_name_plural = "blog images"
 
 
 class Project(models.Model):
@@ -129,6 +130,7 @@ class ProjectImages(models.Model):
 
     class Meta:
         db_table = "project_image_table"
+        verbose_name_plural = "project images"
 
 
 class GalleryPost(models.Model):
@@ -178,6 +180,7 @@ class GalleryPostImages(models.Model):
 
     class Meta:
         db_table = "gallery_post_image_table"
+        verbose_name_plural = "gallery post images"
 
 
 class Tags(models.Model):
@@ -191,6 +194,7 @@ class Tags(models.Model):
 
     class Meta:
         db_table = "tags_table"
+        verbose_name_plural = "tags"
 
 
 class GenericImage(models.Model):
@@ -202,3 +206,4 @@ class GenericImage(models.Model):
 
     class Meta:
         db_table = "generic_image_table"
+        verbose_name_plural = "generic_images"

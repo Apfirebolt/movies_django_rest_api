@@ -19,10 +19,11 @@ from .serializers import (
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import filters
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from accounts.models import CustomUser
 from rest_framework.response import Response
+from . pagination import CustomPagination
 from movie.models import Movie, Game
 from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPostImages, GalleryPost, GenericImage
 
@@ -49,24 +50,18 @@ class ListCustomUsersApiView(ListAPIView):
     search_fields = ['username', 'email']
 
 
-class ListMovieApiView(ListCreateAPIView):
+class ListMovieApiView(ListAPIView):
     serializer_class = ListMovieSerializer
     queryset = Movie.objects.all()
+    pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = ['Movie_Name', 'Year', 'Genre']
     ordering_fields = ['Votes', 'Movie_Name']
     search_fields = ['Movie_Name',]
 
-    def create(self, request, *args, **kwargs):
-        serializer = ListMovieSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
-
 class DetailMovieApiView(RetrieveUpdateDestroyAPIView):
 
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ListMovieSerializer
     queryset = Movie.objects.all()
 
@@ -89,26 +84,21 @@ class DetailMovieApiView(RetrieveUpdateDestroyAPIView):
         return Response(status=204)
 
 
-class ListGameApiView(ListCreateAPIView):
+class ListGameApiView(ListAPIView):
 
     serializer_class = ListGameSerializer
     queryset = Game.objects.all()
+    pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = ['title', 'developer', 'console']
     ordering_fields = ['title', 'developer']
     search_fields = ['title', 'developer', 'console']
 
-    def create(self, request, *args, **kwargs):
-        serializer = ListGameSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
 
 class DetailGameApiView(RetrieveUpdateDestroyAPIView):
 
     serializer_class = ListGameSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Game.objects.all()
 
     def retrieve(self, request, *args, **kwargs):
