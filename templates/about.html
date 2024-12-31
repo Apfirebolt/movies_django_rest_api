@@ -1,0 +1,69 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %} Softgenie - About 
+{% endblock %} 
+
+{% block content %}
+
+<body>
+    <section class="hero is-fullheight is-default is-bold">
+        <div class="hero-head">
+            <nav class="navbar">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="../">
+                            <img src="https://bulma.io/images/bulma-logo.png" alt="Logo" />
+                        </a>
+                        <span class="navbar-burger burger" data-target="navbarMenu">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </div>
+                    <div id="navbarMenu" class="navbar-menu">
+                        <div class="navbar-end">
+                            <div class="tabs is-right">
+                                <ul>
+                                    <li><a href="/">Home</a></li>
+                                    <li class="is-active"><a>About</a></li>
+                                    <li><a href="/examples">Examples</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <div class="columns is-vcentered">
+                    <div class="column is-5">
+                        <figure class="image is-4by3">
+                            <img
+                                src="https://picsum.photos/800/600/?random"
+                                alt="Description"
+                            />
+                        </figure>
+                    </div>
+                    <div class="column is-6 is-offset-1">
+                        <h1 class="title is-2">About Django Movies API</h1>
+                        <h2 class="subtitle is-4">
+                            Django Movies API is a sample project demonstrating how to build a
+                            RESTful API using Django. This project is designed to be extended
+                            with front-end frameworks like React, Angular, or Vue.
+                        </h2>
+                        <br />
+                        <p class="has-text-left">
+                            This project includes various features such as user authentication,
+                            movie listings, and reviews. It serves as a great starting point for
+                            developers looking to build their own movie-related applications.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'footer.html' %}
+    </section>
+</body>
+
+{% endblock %}

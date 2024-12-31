@@ -22,8 +22,11 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('about', TemplateView.as_view(template_name='about.html'), name='about'),
     path('admin/', admin.site.urls),
     path('editor/', include('django_summernote.urls')),
+    path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
+    path('my-blog/', include(('blog.urls', 'my-blog'), namespace='my-blog')),
     path('api/', include(('api.urls', 'api'), namespace='api')),
     path('api-schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
