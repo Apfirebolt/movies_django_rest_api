@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'accounts',
     'movie',
     'blog',
+    'ecommerce',
     'api'
 ]
 

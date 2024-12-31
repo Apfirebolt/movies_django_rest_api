@@ -14,7 +14,8 @@ from .serializers import (
     ListGalleryPostSerializer,
     ListGalleryPostImageSerializer,
     TagsSerializer,
-    GenericImageSerializer
+    GenericImageSerializer,
+    ListItemsSerializer
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -24,6 +25,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from accounts.models import CustomUser
 from rest_framework.response import Response
 from . pagination import CustomPagination
+from ecommerce.models import Item
 from movie.models import Movie, Game
 from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPostImages, GalleryPost, GenericImage
 
@@ -118,6 +120,22 @@ class DetailGameApiView(RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         instance.delete()
         return Response(status=204)
+    
+
+# Ecommerce API
+class ListItemApiView(ListAPIView):
+    serializer_class = ListItemsSerializer
+    queryset = Item.objects.all()
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['title', 'brand']
+    ordering_fields = ['price']
+    search_fields = ['title', 'brand']
+
+    
+    def get_queryset(self):
+        queryset = Item.objects.all()
+        return queryset
 
 
 class ListBlogApiView(ListAPIView):

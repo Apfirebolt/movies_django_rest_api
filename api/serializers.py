@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from movie.models import Movie, Game
 from accounts.models import CustomUser
+from ecommerce.models import Item
 from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, GalleryPost, GalleryPostImages, Tags, GenericImage
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -202,6 +203,13 @@ class GenericImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GenericImage
+        fields = '__all__'
+
+
+class ListItemsSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Item
         fields = '__all__'
 
 
