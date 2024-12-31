@@ -5,26 +5,27 @@
 {% endblock %}
 
 {% block content %}
-    <div class="wrapper overlay row3">
+    <div class="section">
 
-        <div class="bg-white">
-            <div class="max-w-7xl mx-auto py-8 px-4 sm:py-16 sm:px-6 lg:px-8">
-                <div class="text-center">
-                    <p class="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-                        Blog Detail</p>
-                    <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500">What our customers have to say about us.</p>
-                </div>
+        <div class="container">
+            <div class="content has-text-centered">
+                <p class="title is-1">
+                    Blog Detail
+                </p>
             </div>
         </div>
 
         <div class="content">
+            <div id="comments">
+                {% for each_testimonial in testimonials %}
+                    <section class="section">
+                        <div class="container">
+                            
+                        </div>
+                    </section>
+                {% endfor %}
+            </div>
         </div>
     </div>
 
-
 {% endblock %}
-<div class="content">
-    <div id="blogs">
-        
-    </div>
-</div>

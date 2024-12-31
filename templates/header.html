@@ -1,0 +1,50 @@
+<header>
+    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{% url 'home' %}"></a>
+                <img src="https://bulma.io/images/bulma-logo.png" alt="Logo">
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="{% url 'home' %}">
+                    Home
+                </a>
+                <a class="navbar-item" href="{% url 'about' %}">
+                    About
+                </a>
+                <a class="navbar-item" href="{% url 'contact' %}">
+                    Contact
+                </a>
+                <a class="navbar-item" href="{% url 'my-blog:blogs' %}">
+                    Blog
+                </a>
+                <a class="navbar-item" href="{% url 'my-blog:gallery-posts' %}">
+                    Gallery
+                </a>
+                <a class="navbar-item" href="{% url 'my-blog:projects' %}">
+                    Projects
+                </a>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-light" href="{% url 'accounts:login' %}">
+                            Log in
+                        </a>
+                        <a class="button is-primary" href="{% url 'accounts:register' %}"></a>
+                            <strong>Sign up</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

@@ -9,10 +9,15 @@ class BlogDetailView(DetailView):
     context_object_name = 'blog'
     template_name = 'blog/blog-detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['images'] = self.object.images.all()
+        return context
+
 
 class BlogListView(ListView):
     model = Blog
-    template_name = 'blog/blog-list.html'
+    template_name = 'blogs/blog-list.html'
     context_object_name = 'blogs'
 
 

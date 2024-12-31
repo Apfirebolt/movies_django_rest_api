@@ -35,7 +35,7 @@ class LoginView(View):
             messages.add_message(self.request, messages.INFO,
                                  'You have successfully logged in! Please continue to your dashboard!')
             login(request, user)
-            return HttpResponseRedirect(reverse('accounts:dashboard'))
+            return HttpResponseRedirect(reverse('home'))
         else:
             messages.add_message(self.request, messages.ERROR, 'Failed to Login, please try again!')
             return HttpResponseRedirect(self.request.path_info)
