@@ -17,19 +17,20 @@ Softgenie - Gallery
 
     <div class="content">
         <div id="gallery">
-            {% for each_blog in blogs %}
+            {% for post in gallery_posts %}
             <section class="section">
                 <div class="container">
                     <div class="card">
                         <div class="card-header">
                             <p class="card-header-title">
-                                {{ each_blog.title }}
+                                {{ post.title }}
                             </p>
                         </div>
                         <div class="card-content">
                             <div class="content">
                                 <div class="columns is-multiline">
-                                    {% for image in each_blog.images.all %}
+                                    {{ post.description|safe }}
+                                    {% for image in post.images.all %}
                                     <div class="column is-one-third-desktop is-half-tablet is-full-mobile">
                                         <figure class="image is-4by3">
                                             <img src="https://softgenie.org/media/{{ image.image }}" alt="{{ image.caption }}">
@@ -37,18 +38,14 @@ Softgenie - Gallery
                                     </div>
                                     {% endfor %}
                                 </div>
-                                <br>
-                                <small>Posted on {{ each_blog.date_posted }}</small>
-                                <br>
-                                <small>Updated on {{ each_blog.date_updated }}</small>
-                                <br>
-                                <small>Views: {{ each_blog.views }}</small>
-                                <br>
+                                <small>Posted on {{ post.date_posted }}</small>
+                                <small>Views: {{ post.views }}</small>
                                 <small>Tags:
-                                    {% for tag in each_blog.tags.all %}
+                                    {% for tag in post.tags.all %}
                                     <span class="tag">{{ tag.name }}</span>
                                     {% endfor %}
                                 </small>
+                                <a href="{% url 'my-blog:gallery-post' post.id %}" class="button is-link">View Details</a>
                             </div>
                         </div>
                     </div>

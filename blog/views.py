@@ -7,12 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class BlogDetailView(DetailView):
     model = Blog
     context_object_name = 'blog'
-    template_name = 'blog/blog-detail.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['images'] = self.object.images.all()
-        return context
+    template_name = 'blogs/blog-detail.html'
 
 
 class BlogListView(ListView):
