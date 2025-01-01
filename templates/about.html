@@ -1,43 +1,168 @@
-{% extends 'base.html' %} 
-{% load static %} 
-{% block title %} Softgenie - About 
-{% endblock %} 
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %} Softgenie - About
+{% endblock %} {% block content %}
 
 <body>
-    {% include 'header.html' %}
-    <section class="hero is-fullheight is-default is-bold">
-        <div class="hero-body">
-            <div class="container has-text-centered">
-                <div class="columns is-vcentered">
-                    <div class="column is-5">
-                        <figure class="image is-4by3">
-                            <img
-                                src="https://picsum.photos/800/600/?random"
-                                alt="Description"
-                            />
-                        </figure>
-                    </div>
-                    <div class="column is-6 is-offset-1">
-                        <h1 class="is-2">About Django Movies API</h1>
-                        <h2 class="is-4">
-                            Django Movies API is a sample project demonstrating how to build a
-                            RESTful API using Django. This project is designed to be extended
-                            with front-end frameworks like React, Angular, or Vue.
-                        </h2>
-                        <br />
-                        <p class="has-text-left">
-                            This project includes various features such as user authentication,
-                            movie listings, and reviews. It serves as a great starting point for
-                            developers looking to build their own movie-related applications.
-                        </p>
-                    </div>
-                </div>
-            </div>
+  {% include 'header.html' %}
+  <div class="about-container">
+    <h2 class="heading">About Me</h2>
+    <div class="columns">
+      <div class="column">
+        <img
+          src="https://softgenie.org/media/images/generic/my_pic1.jpeg"
+          alt="Description"
+          height="500"
+          width="800"
+          class="about-image"
+        />
+      </div>
+      <div class="column is-6 is-offset-1">
+        <p>
+          Hey there, thanks for visiting this website! My name is
+          <strong>Amit Prafulla</strong> and I am a passionate software
+          developer and an enthusiastic individual who thrives on new
+          experiences. I belong to this city called
+          <strong>Allahabad/Prayagraj</strong> in India. I have a Bachelor's
+          degree in <strong>Computer Science</strong> as well as a Master's
+          degree in <strong>Information Technology</strong> with specialization
+          in Cyber Security.
+        </p>
+
+        <p>
+          I have been working in the software industry for over 6 years now and
+          have experience in various technologies such as
+          <strong
+            >Python, Django, FastAPI, React, Angular, Vue, Node.js, Express.js,
+            MongoDB, PostgreSQL, MySQL, Docker, Kubernetes, AWS, Azure, Google
+            Cloud, and more</strong
+          >. I have worked on various projects ranging from web development to
+          cloud computing and have a keen interest in learning new technologies
+          and frameworks. I am always looking for new opportunities to learn and
+          grow as a software developer. In my spare time I like to work on
+          personal projects, do video editing, travel and play video games.
+        </p>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column is-12">
+        <h3 class="is-2">"Travel is the air I breathe"</h3>
+        <p>
+          I simply love to travel and explore new places. I have been to various
+          places in India and have also traveled to Europe. I'd often take a
+          break from my work and go on a trip to some new place. I believe that
+          traveling is the best way to learn about different cultures, meet new
+          people, and experience new things. I have a bucket list of places that
+          I want to visit and I am slowly ticking them off one at a time. I aim
+          to visit all the
+          <strong> UNESCO World Heritage Sites in India </strong> and explore
+          the beauty of nature and ancient architecture. I've been to 24/42 such
+          destinations as of now.
+        </p>
+
+        <p>
+          I'd often go on solo trips and explore new places on my own. I believe
+          that solo travel is the best way to learn about oneself and grow as an
+          individual. At the time of writing this, I've already been to 20+ solo
+          trips in my life covering 60+ cities in India.
+        </p>
+      </div>
+    </div>
+
+    <div class="columns">
+        <div class="column is-12">
+          <h3 class="is-2">"I have multiple lives – in every game I play."</h3>
+          <p>
+            I love playing video games and it is one of my favorite pastimes. I
+            have been playing video games since I was a kid and have played
+            various games on different platforms. I enjoy playing games on
+            <strong>PC, PS4/PS5, and Mobile</strong>. I have played games
+            from various genres such as
+            <strong>Role-Playing, Action, Adventure, Strategy, and Sports</strong
+            >. I have played games like
+            <strong
+              >Pokemon, Call of Duty, FIFA, Need for Speed, GTA, Age of Empires, DOTA, 
+              Counter Strike, Spider Man, Last of Us, Horizon Zero Dawn and many more</strong
+            >.
+          </p>
+  
+          <p>
+            I believe gaming provides an escape from reality and lets you live multiple virtual lives. It is a great way to relax and unwind after a long day of work. 
+            I often play games with my friends and family and enjoy the competitive spirit that comes with it. I also enjoy watching gaming streams on platforms like Twitch and YouTube. 
+            I have a special liking for games with a good storyline and character development. I believe that games are a form of art and can evoke emotions and feelings just like any other form of art.
+            Playing a game with a good story can be a truly immersive experience, it's like being part of a movie where you control the actions of the protagonist. Games like
+            <strong>The Last of Us, God of War, Uncharted, Red Dead Redemption 2, Spider-Man, Batman and more</strong> have left a lasting impact on me.
+          </p>
         </div>
-    </section>
-    {% include 'footer.html' %}
+    </div>
+
+    <div class="columns">
+      <div class="column is-12">
+        <h3 class="is-2">"Music is the essence of my spirit"</h3>
+        <p>
+          I love listening to music and it is an integral part of my life. I
+          would often listen to instrumental music while I'm working or
+          traveling. I believe that music has the power to heal and soothe the
+          soul. I have a diverse taste in music and enjoy listening to various
+          genres such as
+          <strong>Classical, Jazz, Rock, and Pop</strong>. I also enjoy playing
+          the Guitar and Piano. I've been learning to play those instruments for
+          a few months now with little success. I am into
+          <strong>Bollywood music</strong> especially the ones from 2003-2013.
+          I've grown up listening to those songs on 9XM. They are still part of
+          my playlist and I often listen to them while working or traveling.
+          I've a special liking for slow romantic songs. I'd often try to sing
+          those and create covers of them. My favorite singers are
+          <strong
+            >Arijit Singh, Mohit Chauhan, Sonu Nigam, and Shreya Ghoshal</strong
+          >.
+        </p>
+
+        <p>
+          I also enjoy Western Music and have a special liking for bands like
+          <strong
+            >Backstreet Boys, One Direction, Linkin Park, The Chainsmokers 3
+            Days Grace and Breaking Benjamin</strong
+          >. My favorite singers are
+          <strong
+            >Ed Sheeran, Taylor Swift, Ellie Goulding, Katy Perry, Enrique
+            Iglesias, Shakira and more</strong
+          >.
+        </p>
+      </div>
+    </div>
+
+    <div class="columns">
+        <div class="column is-12">
+          <h3 class="is-2">"My penchant for Photography and Video editing"</h3>
+          <p>
+            I think most people who travel have a natural inclination towards photography. I am no different. I love capturing moments and creating memories through photographs.
+            I have a keen interest in photography and enjoy clicking pictures of landscapes, architecture, and people. I believe that photography is a form of art that allows you to express yourself and capture the beauty of the world around you. 
+            I have a collection of photographs from my travels that I cherish and look back on fondly. I also enjoy editing photos and creating collages and albums to preserve my memories.
+          </p>
+  
+          <p>
+            I am also into video editing and have created various videos for my personal projects and travel diaries. I enjoy the process of editing videos and adding effects and music to create a visually appealing story. 
+            I believe that video editing is a creative process that allows you to tell a story and evoke emotions through visuals and sound. 
+            I have created videos for my travel diaries, personal projects, and events. I enjoy experimenting with different editing styles and techniques to create unique and engaging videos.
+            I've worked with Softwares such as <strong>Adobe Premiere Pro, After Effects, Wondershare Filmora and Movavi Creative Suite</strong> for video editing.
+          </p>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column is-12">
+          <h3 class="is-2">"I ❤️ Cooking"</h3>
+          <p>
+            Cooking is one of my favorite hobbies and I enjoy experimenting with different cuisines and recipes. I believe that cooking is a form of art that allows you to express yourself and create something delicious from scratch.
+          </p>
+  
+          <p>
+            I like to cook various dishes ranging from Indian to Italian to Chinese. I enjoy trying out new recipes and adding my own twist to them. I often cook for my friends and family and enjoy the process of creating a meal from start to finish.
+          </p>
+        </div>
+    </div>
+
+  {% include 'footer.html' %}
 </body>
 
 {% endblock %}
