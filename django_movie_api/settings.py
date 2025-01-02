@@ -37,7 +37,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://nuxt-portfolio-beryl.vercel.app",
     "https://react-games-database.vercel.app",
     "https://next-games-six.vercel.app",
-    "https://www.codelean.in"
+    "https://www.codelean.in",
+    "https://www.apgiiit.com"
 ]
 
 # Application definition
