@@ -1,28 +1,67 @@
 {% extends 'base.html' %}
-{% load widget_tweaks %}
-{% block title %}
-    Softgenie - Project Detail
+{% load static %}
+{% block title %} Softgenie - Projects
 {% endblock %}
 
 {% block content %}
-    <div class="wrapper overlay row3">
 
-        <div class="bg-white">
-            <div class="max-w-7xl mx-auto py-8 px-4 sm:py-16 sm:px-6 lg:px-8">
-                <div class="text-center">
-                    <p class="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-                        Project Detail</p>
-                    <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500">What our customers have to say about us.</p>
+<body>
+    {% include 'header.html' %}
+    <div class="about-container">
+        <h2 class="heading">Projects</h2>
+
+        <div class="columns">
+            <section class="section column is-12">
+                <div class="container">
+                    <div class="card-header">
+                        <p class="card-header-title">
+                            {{ project.title }}
+                        </p>
+                    </div>
+                    <div class="card-content">
+                        <div class="content">
+                            {{ project.description|safe }}
+                            <br>
+                            <br>
+                            <small>Started on {{ project.date_posted }}</small>
+                            <br>
+                            <small>Updated on {{ project.date_updated }}</small>
+                            <br>
+                            <small>Status: {{ project.status }}</small>
+                            <br>
+                            <small>Tags:
+                                {% for tag in project.tags.all %}
+                                <span class="tag">{{ tag.name }}</span>
+                                {% endfor %}
+                            </small>
+                            <p>
+                                Project Link : <a href="{{ project.project_link }}" target="_blank">
+                                    {{ project.project_link }}</a>
+                            </p>
+                            <p>
+                                Technologies Used : {{ project.technology }}
+                            </p>
+                            <br>
+                            <small>Images:</small>
+                            <div class="columns is-multiline">
+                                {% for image in project.images.all %}
+                                <div class="column is-one-third-desktop is-half-tablet is-full-mobile">
+                                    <figure class="image is-512x512">
+                                        <img src="https://softgenie.org/media/{{ image.image }}"
+                                            alt="{{ image.caption }}">
+                                    </figure>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
         </div>
 
-        <div class="content">
-        </div>
     </div>
-
+    </div>
+    {% include 'footer.html' %}
+</body>
 
 {% endblock %}
-<div class="content">
-    <div id="projects"></div>
-</div>

@@ -1,60 +1,62 @@
-{% extends 'base.html' %}
-{% load widget_tweaks %}
-{% block title %}
-Softgenie - Gallery
-{% endblock %}
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %} Softgenie - Gallery 
+{% endblock %} 
 
 {% block content %}
-{% include 'header.html' %}
-<div class="section">
-    <div class="container">
-        <div class="content has-text-centered">
-            <p class="title is-1">
-                Gallery
-            </p>
-        </div>
-    </div>
 
-    <div class="content">
-        <div id="gallery">
-            {% for post in gallery_posts %}
-            <section class="section">
-                <div class="container">
-                    <div class="card">
-                        <div class="card-header">
-                            <p class="card-header-title">
-                                {{ post.title }}
-                            </p>
-                        </div>
-                        <div class="card-content">
-                            <div class="content">
-                                <div class="columns is-multiline">
-                                    {{ post.description|safe }}
-                                    {% for image in post.images.all %}
-                                    <div class="column is-one-third-desktop is-half-tablet is-full-mobile">
-                                        <figure class="image is-4by3">
-                                            <img src="https://softgenie.org/media/{{ image.image }}" alt="{{ image.caption }}">
-                                        </figure>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                                <small>Posted on {{ post.date_posted }}</small>
-                                <small>Views: {{ post.views }}</small>
-                                <small>Tags:
-                                    {% for tag in post.tags.all %}
-                                    <span class="tag">{{ tag.name }}</span>
-                                    {% endfor %}
-                                </small>
-                                <a href="{% url 'my-blog:gallery-post' post.id %}" class="button is-link">View Details</a>
+<body>
+  {% include 'header.html' %}
+  <div class="about-container">
+    <h2 class="heading">Gallery</h2>
+
+    <div class="columns">
+      <div class="column is-12">
+        {% for each_gallery in gallery_posts %}
+        <section class="section">
+            <div class="container">
+                <div class="card-header">
+                    <p class="card-header-title">
+                        {{ each_gallery.title }}
+                    </p>
+                </div>
+                <div class="card-content">
+                    <div class="content">
+                        {{ each_gallery.description|safe }}
+                        <br>
+                        <br>
+                        <small>Posted on {{ each_gallery.date_posted }}</small>
+                        <br>
+                        <small>Updated on {{ each_gallery.date_updated }}</small>
+                        <br>
+                        <small>Views: {{ each_gallery.views }}</small>
+                        <br>
+                        <small>Tags:
+                            {% for tag in each_gallery.tags.all %}
+                            <span class="tag">{{ tag.name }}</span>
+                            {% endfor %}
+                        </small>
+                    <br>
+                    <small>Images:</small>
+                        <div class="columns is-multiline">
+                            {% for image in each_gallery.images.all %}
+                            <div class="column is-one-third-desktop is-half-tablet is-full-mobile">
+                                <figure class="image is-512x512">
+                                    <img src="https://softgenie.org/media/{{ image.image }}" alt="{{ image.caption }}">
+                                </figure>
                             </div>
+                            {% endfor %}
                         </div>
+                        <a href="{% url 'my-blog:gallery-post' each_gallery.id %}" class="button is-link">View Details</a>
                     </div>
                 </div>
-            </section>
-            {% endfor %}
-        </div>
-    </div>
+            </div>
+        </section>
+        {% endfor %}
+      </div>
+  </div>
 </div>
-{% include 'footer.html' %}
+  {% include 'footer.html' %}
+</body>
 
 {% endblock %}
