@@ -25,7 +25,7 @@ Softgenie - Login
                         Sign in to your account
                     </h2>
                     <form action="" method="POST">
-                        <p>Please create an account or login with existing account to register service requests pertaining to your electronic appliances.</p>
+                        <p>Please create an account or login with existing account to make requests for APIs</p>
                         {% csrf_token %}
                         <input type="hidden" name="remember" value="true">
                         <div class="field">
@@ -42,24 +42,15 @@ Softgenie - Login
                         </div>
                         <div class="field">
                             <div class="control">
-                                <label class="checkbox">
-                                    <input type="checkbox" id="remember-me" name="remember-me">
-                                    Remember me
-                                </label>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="control">
-                                <button type="submit" class="button is-primary is-fullwidth">
-                                    <span class="icon is-small">
-                                        <i class="fas fa-lock"></i>
-                                    </span>
+                                <button type="submit" class="button midnight-green-bg day-color is-fullwidth">
                                     <span>Sign in</span>
                                 </button>
                             </div>
                         </div>
-                        <div class="field has-text-centered">
-                            <a href="#" class="is-link">Forgot your password?</a>
+                        <div class="field">
+                            <p class="has-text-centered">
+                                Not a member? <a href="{% url 'accounts:register' %}">Register here</a>
+                            </p>
                         </div>
                     </form>
                 </div>
