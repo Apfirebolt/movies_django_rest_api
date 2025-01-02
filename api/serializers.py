@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from movie.models import Movie, Game
+from movie.models import Movie, Game, Netflix
 from accounts.models import CustomUser
 from ecommerce.models import Item
 from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, GalleryPost, GalleryPostImages, Tags, GenericImage
@@ -210,6 +210,13 @@ class ListItemsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Item
+        fields = '__all__'
+
+
+class ListNetflixSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Netflix
         fields = '__all__'
 
 

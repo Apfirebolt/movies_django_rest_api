@@ -3,6 +3,7 @@ from .views import (
     ListMovieApiView,
     DetailMovieApiView,
     ListGameApiView,
+    ListNetflixApiView,
     DetailGameApiView,
     CreateCustomUserApiView,
     ListBlogApiView,
@@ -51,6 +52,7 @@ urlpatterns = [
     path("tags/<int:pk>", TagDetailApiView.as_view(), name="detail-tags"),
     path("generic-images", GenericImageListApiView.as_view(), name="list-images"),
 
+    path("netflix", ListNetflixApiView.as_view(), name="list-create-netflix"),
     path("movies", ListMovieApiView.as_view(), name="list-create-movies"),
     path("movies/<int:pk>", DetailMovieApiView.as_view(), name="detail-movies"),
     path("games", ListGameApiView.as_view(), name="list-create-games"),

@@ -18,6 +18,27 @@ class Movie(models.Model):
         db_table = 'movies_table'
 
 
+class Netflix(models.Model):
+    show_id = models.CharField(max_length=50, primary_key=True)
+    type = models.CharField(max_length=50)
+    title = models.CharField(max_length=255)
+    director = models.CharField(max_length=255, null=True, blank=True)
+    cast = models.TextField(null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
+    date_added = models.DateField(null=True, blank=True)
+    release_year = models.IntegerField(null=True, blank=True)
+    rating = models.CharField(max_length=50, null=True, blank=True)
+    duration = models.CharField(max_length=50, null=True, blank=True)
+    listed_in = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        db_table = 'netflix_table'
+
+
 class Game(models.Model):
     img = models.CharField(max_length=255, null=True, blank=True)
     title = models.CharField(max_length=100)

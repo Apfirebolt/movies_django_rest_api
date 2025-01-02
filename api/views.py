@@ -2,6 +2,7 @@ from rest_framework.generics import ListCreateAPIView, ListAPIView, CreateAPIVie
 from .serializers import (
     ListMovieSerializer,
     ListGameSerializer,
+    ListNetflixSerializer,
     ListCustomUserSerializer,
     CustomUserSerializer,
     CustomTokenObtainPairSerializer,
@@ -26,7 +27,7 @@ from accounts.models import CustomUser
 from rest_framework.response import Response
 from . pagination import CustomPagination
 from ecommerce.models import Item
-from movie.models import Movie, Game
+from movie.models import Movie, Game, Netflix
 from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPostImages, GalleryPost, GenericImage
 
 
@@ -120,6 +121,18 @@ class DetailGameApiView(RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         instance.delete()
         return Response(status=204)
+    
+
+# Netflix API
+class ListNetflixApiView(ListAPIView):
+    
+    serializer_class = ListNetflixSerializer
+    queryset = Netflix.objects.all()
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['title', 'director', 'type']
+    ordering_fields = ['release_year', 'title']
+    search_fields = ['title', 'director', 'type']
     
 
 # Ecommerce API
