@@ -1,63 +1,59 @@
-{% extends 'base.html' %}
-{% load widget_tweaks %}
-{% block title %}
-Softgenie - Blog Detail
-{% endblock %}
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %} Softgenie - Blog 
+{% endblock %} 
 
 {% block content %}
-{% include 'header.html' %}
-<div class="section">
-    <div class="container">
-        <div class="content has-text-centered">
-            <p class="title is-1">
-                Blog Detail
-            </p>
-        </div>
-    </div>
 
-    <div class="content">
-        <div id="comments">
-            <section class="section">
-                <div class="container">
-                    <div class="card-header">
-                        <p class="card-header-title">
-                            {{ blog.title }}
-                        </p>
-                    </div>
-                    <div class="card-content">
-                        <div class="content">
-                            {{ blog.content|safe }}
-                            <br>
-                            <br>
-                            <small>Posted on {{ blog.date_posted }}</small>
-                            <br>
-                            <small>Updated on {{ blog.date_updated }}</small>
-                            <br>
-                            <small>Views: {{ blog.views }}</small>
-                            <br>
-                            <small>Tags:
-                                {% for tag in blog.tags.all %}
-                                <span class="tag">{{ tag.name }}</span>
-                                {% endfor %}
-                            </small>
+<body>
+  {% include 'header.html' %}
+  <div class="about-container">
+    <h2 class="heading">Blog</h2>
+
+    <div class="columns">
+      <div class="column is-12">
+        <section class="section">
+            <div class="container">
+                <div class="card-header">
+                    <p class="card-header-title">
+                        {{ blog.title }}
+                    </p>
+                </div>
+                <div class="card-content">
+                    <div class="content">
+                        {{ blog.content|safe }}
                         <br>
-                        <small>Images:</small>
-                            <div class="columns is-multiline">
-                                {% for image in blog.images.all %}
-                                <div class="column is-one-third-desktop is-half-tablet is-full-mobile">
-                                    <figure class="image is-512x512">
-                                        <img src="https://softgenie.org/media/{{ image.image }}" alt="{{ image.caption }}">
-                                    </figure>
-                                </div>
-                                {% endfor %}
+                        <br>
+                        <small>Posted on {{ blog.date_posted }}</small>
+                        <br>
+                        <small>Updated on {{ blog.date_updated }}</small>
+                        <br>
+                        <small>Views: {{ blog.views }}</small>
+                        <br>
+                        <small>Tags:
+                            {% for tag in blog.tags.all %}
+                            <span class="tag">{{ tag.name }}</span>
+                            {% endfor %}
+                        </small>
+                    <br>
+                    <small>Images:</small>
+                        <div class="columns is-multiline">
+                            {% for image in blog.images.all %}
+                            <div class="column is-one-third-desktop is-half-tablet is-full-mobile">
+                                <figure class="image is-512x512">
+                                    <img src="https://softgenie.org/media/{{ image.image }}" alt="{{ image.caption }}">
+                                </figure>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
-    </div>
+            </div>
+        </section>
+      </div>
+  </div>
 </div>
-{% include 'footer.html' %}
+  {% include 'footer.html' %}
+</body>
 
 {% endblock %}

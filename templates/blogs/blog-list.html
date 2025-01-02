@@ -1,66 +1,62 @@
-{% extends 'base.html' %}
-{% load widget_tweaks %}
-{% block title %}
-Softgenie - Blogs
-{% endblock %}
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %} Softgenie - Blog 
+{% endblock %} 
 
 {% block content %}
-{% include 'header.html' %}
-<div class="section">
-    <div class="container">
-        <div class="content has-text-centered">
-            <p class="title is-1">
-                Blogs
-            </p>
-        </div>
-    </div>
 
-    <div class="content">
-        <div id="comments">
-            {% for each_blog in blogs %}
-            <section class="section">
-                <div class="container">
-                    <div class="card-header">
-                        <p class="card-header-title">
-                            {{ each_blog.title }}
-                        </p>
-                    </div>
-                    <div class="card-content">
-                        <div class="content">
-                            {{ each_blog.content|safe }}
-                            <br>
-                            <br>
-                            <small>Posted on {{ each_blog.date_posted }}</small>
-                            <br>
-                            <small>Updated on {{ each_blog.date_updated }}</small>
-                            <br>
-                            <small>Views: {{ each_blog.views }}</small>
-                            <br>
-                            <small>Tags:
-                                {% for tag in each_blog.tags.all %}
-                                <span class="tag">{{ tag.name }}</span>
-                                {% endfor %}
-                            </small>
+<body>
+  {% include 'header.html' %}
+  <div class="about-container">
+    <h2 class="heading">Blog</h2>
+
+    <div class="columns">
+      <div class="column is-12">
+        {% for each_blog in blogs %}
+        <section class="section">
+            <div class="container">
+                <div class="card-header">
+                    <p class="card-header-title">
+                        {{ each_blog.title }}
+                    </p>
+                </div>
+                <div class="card-content">
+                    <div class="content">
+                        {{ each_blog.content|safe }}
                         <br>
-                        <small>Images:</small>
-                            <div class="columns is-multiline">
-                                {% for image in each_blog.images.all %}
-                                <div class="column is-one-third-desktop is-half-tablet is-full-mobile">
-                                    <figure class="image is-512x512">
-                                        <img src="https://softgenie.org/media/{{ image.image }}" alt="{{ image.caption }}">
-                                    </figure>
-                                </div>
-                                {% endfor %}
+                        <br>
+                        <small>Posted on {{ each_blog.date_posted }}</small>
+                        <br>
+                        <small>Updated on {{ each_blog.date_updated }}</small>
+                        <br>
+                        <small>Views: {{ each_blog.views }}</small>
+                        <br>
+                        <small>Tags:
+                            {% for tag in each_blog.tags.all %}
+                            <span class="tag">{{ tag.name }}</span>
+                            {% endfor %}
+                        </small>
+                    <br>
+                    <small>Images:</small>
+                        <div class="columns is-multiline">
+                            {% for image in each_blog.images.all %}
+                            <div class="column is-one-third-desktop is-half-tablet is-full-mobile">
+                                <figure class="image is-512x512">
+                                    <img src="https://softgenie.org/media/{{ image.image }}" alt="{{ image.caption }}">
+                                </figure>
                             </div>
-                            <a href="{% url 'my-blog:blog' each_blog.id %}" class="button is-link">View Details</a>
+                            {% endfor %}
                         </div>
+                        <a href="{% url 'my-blog:blog' each_blog.id %}" class="button is-link">View Details</a>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
         {% endfor %}
-    </div>
+      </div>
+  </div>
 </div>
-{% include 'footer.html' %}
+  {% include 'footer.html' %}
+</body>
 
 {% endblock %}
