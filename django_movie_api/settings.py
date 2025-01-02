@@ -36,6 +36,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
     "https://nuxt-portfolio-beryl.vercel.app",
     "https://react-games-database.vercel.app",
+    "https://next-games-six.vercel.app",
 ]
 
 # Application definition
