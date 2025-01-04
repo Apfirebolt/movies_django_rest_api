@@ -23,7 +23,8 @@ from .views import (
     CreateGalleryPostApiView,
     GalleryPostDetailApiView,
     GenericImageListApiView,
-    ListItemApiView
+    ListItemApiView,
+    ListFundApiView
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -52,6 +53,7 @@ urlpatterns = [
     path("tags/<int:pk>", TagDetailApiView.as_view(), name="detail-tags"),
     path("generic-images", GenericImageListApiView.as_view(), name="list-images"),
 
+    path("funds", ListFundApiView.as_view(), name="list-funds"),
     path("netflix", ListNetflixApiView.as_view(), name="list-create-netflix"),
     path("movies", ListMovieApiView.as_view(), name="list-create-movies"),
     path("movies/<int:pk>", DetailMovieApiView.as_view(), name="detail-movies"),

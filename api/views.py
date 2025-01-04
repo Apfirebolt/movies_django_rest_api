@@ -16,7 +16,8 @@ from .serializers import (
     ListGalleryPostImageSerializer,
     TagsSerializer,
     GenericImageSerializer,
-    ListItemsSerializer
+    ListItemsSerializer,
+    ListFundSerializer
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -27,6 +28,7 @@ from accounts.models import CustomUser
 from rest_framework.response import Response
 from . pagination import CustomPagination
 from ecommerce.models import Item
+from funds.models import Fund
 from movie.models import Movie, Game, Netflix
 from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPostImages, GalleryPost, GenericImage
 
@@ -149,7 +151,18 @@ class ListItemApiView(ListAPIView):
     def get_queryset(self):
         queryset = Item.objects.all()
         return queryset
+    
 
+# Funds API
+class ListFundApiView(ListAPIView):
+    serializer_class = ListFundSerializer
+    queryset = Fund.objects.all()
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['scheme_name', 'scheme_type']
+    ordering_fields = ['net_asset_value', 'scheme_name']
+    search_fields = ['scheme_name', 'scheme_type']
+    
 
 class ListBlogApiView(ListAPIView):
 
