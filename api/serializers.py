@@ -3,6 +3,7 @@ from movie.models import Movie, Game, Netflix
 from accounts.models import CustomUser
 from ecommerce.models import Item
 from funds.models import Fund
+from dinosaur.models import Dinosaur
 from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, GalleryPost, GalleryPostImages, Tags, GenericImage
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -225,6 +226,13 @@ class ListFundSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Fund
+        fields = '__all__'
+
+
+class ListDinosaurSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Dinosaur
         fields = '__all__'
 
 

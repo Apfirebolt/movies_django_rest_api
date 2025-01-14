@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'blog',
     'ecommerce',
     'funds',
+    'dinosaur',
     'api'
 ]
 
