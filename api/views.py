@@ -174,7 +174,7 @@ class ListDinosaurApiView(ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = ['name', 'diet']
     ordering_fields = ['length', 'name']
-    search_fields = ['name', 'diet']
+    search_fields = ['name', 'diet', 'period', 'lived_in', 'type', 'taxonomy', 'named_by', 'species', 'link']
     
 
 class ListBlogApiView(ListAPIView):

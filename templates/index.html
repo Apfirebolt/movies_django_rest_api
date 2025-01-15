@@ -10,6 +10,14 @@
 <body>
   {% include 'header.html' %}
   <div class="about-container">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="notification is-danger">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    
     <h2 class="heading">Home</h2>
     <div class="columns">
         <div class="column">

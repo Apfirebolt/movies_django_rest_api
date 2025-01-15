@@ -12,41 +12,55 @@
                 <span aria-hidden="true"></span>
             </a>
         </div>
+         
+        <div class="navbar-start">
+            <a class="navbar-item" href="{% url 'home' %}">
+                Home
+            </a>
+            <a class="navbar-item" href="{% url 'about' %}">
+                About
+            </a>
+            <a class="navbar-item" href="{% url 'contact' %}">
+                Contact
+            </a>
+            <a class="navbar-item" href="{% url 'my-blog:blogs' %}">
+                Blog
+            </a>
+            <a class="navbar-item" href="{% url 'my-blog:gallery-posts' %}">
+                Gallery
+            </a>
+            <a class="navbar-item" href="{% url 'my-blog:projects' %}">
+                Projects
+            </a>
+        </div>
 
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="{% url 'home' %}">
-                    Home
-                </a>
-                <a class="navbar-item" href="{% url 'about' %}">
-                    About
-                </a>
-                <a class="navbar-item" href="{% url 'contact' %}">
-                    Contact
-                </a>
-                <a class="navbar-item" href="{% url 'my-blog:blogs' %}">
-                    Blog
-                </a>
-                <a class="navbar-item" href="{% url 'my-blog:gallery-posts' %}">
-                    Gallery
-                </a>
-                <a class="navbar-item" href="{% url 'my-blog:projects' %}">
-                    Projects
-                </a>
-            </div>
-
-            <div class="navbar-end">
-                <div class="navbar-item">
+        <div class="navbar-end">
+            {% if user.is_authenticated %}
+            <div class="navbar-item">
+                <span>
+                    Welcome, {{ user.email }}
+                </span>
+                <form method="post" action="{% url 'accounts:logout' %}">
+                    {% csrf_token %}
                     <div class="buttons">
-                        <a class="button day-color night-color-bg" href="{% url 'accounts:login' %}">
-                            Log in
-                        </a>
-                        <a class="button is-light" href="{% url 'accounts:register' %}">
-                            Sign up
-                        </a>
+                        <button type="submit" class="button day-color night-color-bg">
+                            Log out
+                        </button>
                     </div>
+                </form>
+            </div>
+            {% else %}
+            <div class="navbar-item">
+                <div class="buttons">
+                    <a class="button day-color night-color-bg" href="{% url 'accounts:login' %}">
+                        Log in
+                    </a>
+                    <a class="button is-light" href="{% url 'accounts:register' %}">
+                        Sign up
+                    </a>
                 </div>
             </div>
+            {% endif %}
         </div>
     </nav>
 </header>
