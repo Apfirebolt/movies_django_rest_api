@@ -281,4 +281,13 @@ class ListPlanetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Planet
-        fields = "__all__"
+        fields = [
+            "planet_name",
+            "planet_host",
+            "num_stars",
+            "num_planets",
+            "discovery_method",
+            "discovery_year",
+            "discovery_facility",
+            "spectral_type",
+        ]
