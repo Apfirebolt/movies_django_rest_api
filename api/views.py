@@ -19,6 +19,7 @@ from .serializers import (
     ListItemsSerializer,
     ListFundSerializer, 
     ListDinosaurSerializer,
+    ListPlanetSerializer
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -32,6 +33,7 @@ from ecommerce.models import Item
 from funds.models import Fund
 from dinosaur.models import Dinosaur
 from movie.models import Movie, Game, Netflix
+from planets.models import Planet
 from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPostImages, GalleryPost, GenericImage
 
 
@@ -175,6 +177,18 @@ class ListDinosaurApiView(ListAPIView):
     filterset_fields = ['name', 'diet']
     ordering_fields = ['length', 'name']
     search_fields = ['name', 'diet', 'period', 'lived_in', 'type', 'taxonomy', 'named_by', 'species', 'link']
+
+
+# Planets API
+class ListPlanetApiView(ListAPIView):
+    serializer_class = ListPlanetSerializer
+    queryset = Planet.objects.all()
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['planet_name', 'planet_host', 'discovery_method']
+    ordering_fields = ['discovery_year', 'planet_name']
+    search_fields = ['planet_name', 'planet_host', 'discovery_method', 'spectral_type', 'stellar_metallicity_ratio']
+
     
 
 class ListBlogApiView(ListAPIView):
@@ -479,6 +493,9 @@ class GenericImageListApiView(ListAPIView):
     serializer_class = GenericImageSerializer
     queryset = GenericImage.objects.all()
     permission_classes = [IsAuthenticated]
+
+
+
     
     
     

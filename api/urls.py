@@ -25,7 +25,8 @@ from .views import (
     GenericImageListApiView,
     ListItemApiView,
     ListFundApiView,
-    ListDinosaurApiView
+    ListDinosaurApiView,
+    ListPlanetApiView
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -62,4 +63,5 @@ urlpatterns = [
     path("games/<int:pk>", DetailGameApiView.as_view(), name="detail-games"),
     path("items", ListItemApiView.as_view(), name="list-items"),
     path("dinosaur", ListDinosaurApiView.as_view(), name="list-dinosaur"),
+    path("planets", ListPlanetApiView.as_view(), name="list-planet"),
 ]

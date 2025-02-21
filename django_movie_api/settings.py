@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'ecommerce',
     'funds',
     'dinosaur',
+    'planets',
     'api'
 ]
 
