@@ -17,6 +17,7 @@ from blog.models import (
     Tags,
     GenericImage,
 )
+from books.models import Book
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -290,4 +291,12 @@ class ListPlanetSerializer(serializers.ModelSerializer):
             "discovery_year",
             "discovery_facility",
             "spectral_type",
+            "stellar_metallicity_ratio",
         ]
+
+
+class ListBookSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Book
+        fields = "__all__"

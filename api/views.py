@@ -19,7 +19,8 @@ from .serializers import (
     ListItemsSerializer,
     ListFundSerializer, 
     ListDinosaurSerializer,
-    ListPlanetSerializer
+    ListPlanetSerializer,
+    ListBookSerializer
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -34,6 +35,7 @@ from funds.models import Fund
 from dinosaur.models import Dinosaur
 from movie.models import Movie, Game, Netflix
 from planets.models import Planet
+from books.models import Book
 from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPostImages, GalleryPost, GenericImage
 
 
@@ -189,8 +191,18 @@ class ListPlanetApiView(ListAPIView):
     ordering_fields = ['discovery_year', 'planet_name']
     search_fields = ['planet_name', 'planet_host', 'discovery_method', 'spectral_type', 'stellar_metallicity_ratio']
 
-    
 
+# Books API
+class ListBookApiView(ListAPIView):
+    serializer_class = ListBookSerializer
+    queryset = Book.objects.all()
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['title', 'authors', 'category']
+    ordering_fields = ['publish_date_year', 'title']
+    search_fields = ['title', 'authors', 'publisher', 'category']
+
+    
 class ListBlogApiView(ListAPIView):
 
     serializer_class = ListBlogSerializer

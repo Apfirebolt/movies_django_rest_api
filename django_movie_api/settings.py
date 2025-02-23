@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'funds',
     'dinosaur',
     'planets',
+    "books",
     'api'
 ]
 
