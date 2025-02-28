@@ -20,7 +20,8 @@ from .serializers import (
     ListFundSerializer, 
     ListDinosaurSerializer,
     ListPlanetSerializer,
-    ListBookSerializer
+    ListBookSerializer,
+    ListLyricsSerializer
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -36,6 +37,7 @@ from dinosaur.models import Dinosaur
 from movie.models import Movie, Game, Netflix
 from planets.models import Planet
 from books.models import Book
+from lyrics.models import Lyrics
 from blog.models import Blog, BlogPost, PostImage, BlogImage, Project, ProjectImages, Tags, GalleryPostImages, GalleryPost, GenericImage
 
 
@@ -201,6 +203,17 @@ class ListBookApiView(ListAPIView):
     filterset_fields = ['title', 'authors', 'category']
     ordering_fields = ['publish_date_year', 'title']
     search_fields = ['title', 'authors', 'publisher', 'category']
+
+
+# Lyrics API
+class ListLyricsApiView(ListAPIView):
+    serializer_class = ListLyricsSerializer
+    queryset = Lyrics.objects.all()
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['title', 'singer', 'composer']
+    ordering_fields = ['year', 'title']
+    search_fields = ['title', 'singer', 'composer', 'lyrics']
 
     
 class ListBlogApiView(ListAPIView):

@@ -10,7 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         df = pd.read_csv("data/books.csv")
         not_saved = []
-        for index, row in df.iloc[1501:15000].iterrows():
+        for index, row in df.iloc[100001:].iterrows():
             try:
                 current_book = Book(
                     title=row.get("Title"),

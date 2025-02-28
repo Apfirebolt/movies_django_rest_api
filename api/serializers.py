@@ -18,6 +18,7 @@ from blog.models import (
     GenericImage,
 )
 from books.models import Book
+from lyrics.models import Lyrics
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -299,4 +300,11 @@ class ListBookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
+        fields = "__all__"
+
+
+class ListLyricsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Lyrics
         fields = "__all__"
