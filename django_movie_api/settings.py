@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'planets',
     "books",
     "lyrics",
+    "anime",
     'api'
 ]
 

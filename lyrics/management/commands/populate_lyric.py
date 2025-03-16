@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         df = pd.read_csv("data/lyrics.csv")
         not_saved = []
-        for index, row in df.iloc[1001:2000].iterrows():
+        for index, row in df.iloc[9001:].iterrows():
             try:
                 current_lyric = Lyrics(
                     title=row.get("Title"),
@@ -18,7 +18,7 @@ class Command(BaseCommand):
                     composer=row.get("Composer"),
                     lyricist=row.get("Lyricist"),
                     year=row.get("Year"),
-                    lyrics=row.get("Lyrics")
+                    lyrics=row.get("Lyrics"),
                 )
                 current_lyric.save()
                 print("Data saved for ", row["Title"])

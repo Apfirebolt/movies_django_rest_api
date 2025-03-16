@@ -28,6 +28,8 @@ from .views import (
     ListDinosaurApiView,
     ListPlanetApiView,
     ListBookApiView,
+    BookDetailApiView,
+    PlanetDetailApiView,
     ListLyricsApiView,
 )
 from rest_framework_simplejwt.views import (
@@ -66,6 +68,8 @@ urlpatterns = [
     path("items", ListItemApiView.as_view(), name="list-items"),
     path("dinosaur", ListDinosaurApiView.as_view(), name="list-dinosaur"),
     path("planets", ListPlanetApiView.as_view(), name="list-planet"),
+    path("planets/<int:pk>", PlanetDetailApiView.as_view(), name="detail-planet"),
     path("books", ListBookApiView.as_view(), name="list-books"),
+    path("books/<int:pk>", BookDetailApiView.as_view(), name="detail-books"),
     path("lyrics", ListLyricsApiView.as_view(), name="list-lyrics"),
 ]
