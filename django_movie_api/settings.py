@@ -30,19 +30,21 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['206.81.29.244', 'localhost', 'http://softgenie.org', 'softgenie.org', 'www.softgenie.org']
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:8080",
-    "http://localhost:4200",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
-    "https://nuxt-portfolio-beryl.vercel.app",
-    "https://react-games-database.vercel.app",
-    "https://next-games-six.vercel.app",
-    "https://svelte-kit-portfolio-xi.vercel.app",
-    "https://www.codelean.in",
-    "https://www.apgiiit.com"
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://localhost:8080",
+#     "http://localhost:4200",
+#     "http://localhost:5500",
+#     "http://127.0.0.1:5500",
+#     "https://nuxt-portfolio-beryl.vercel.app",
+#     "https://react-games-database.vercel.app",
+#     "https://next-games-six.vercel.app",
+#     "https://svelte-kit-portfolio-xi.vercel.app",
+#     "https://www.codelean.in",
+#     "https://www.apgiiit.com"
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
