@@ -1,8 +1,77 @@
 {% load static %}
-<footer class="footer night-color-bg day-color">
-    <div class="content has-text-centered">
-        <p>
-            SoftGenie.org @ 2025 all rights reserved.
+<footer class="footer night-color-bg day-color py-6">
+  <div class="container">
+    <div class="columns is-multiline">
+      
+      <!-- Brand & About -->
+      <div class="column is-4">
+        <h4 class="title is-4 has-text-weight-bold mb-3 has-text-primary">SoftGenie</h4>
+        <p class="is-size-6 mb-4" style="opacity: 0.85;">
+          Building modern web experiences and software solutions that scale.
         </p>
+        <!-- Social Links (FontAwesome icons) -->
+        <div class="buttons">
+          <a class="button is-small is-rounded is-outlined" href="https://github.com" target="_blank" rel="noopener">
+            <span class="icon is-small"><i class="fab fa-github"></i></span>
+          </a>
+          <a class="button is-small is-rounded is-outlined" href="https://twitter.com" target="_blank" rel="noopener">
+            <span class="icon is-small"><i class="fab fa-twitter"></i></span>
+          </a>
+          <a class="button is-small is-rounded is-outlined" href="https://linkedin.com" target="_blank" rel="noopener">
+            <span class="icon is-small"><i class="fab fa-linkedin-in"></i></span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Navigation -->
+      <div class="column is-2 is-offset-1">
+        <p class="heading has-text-weight-semibold mb-3">Product</p>
+        <ul class="list-unstyled" style="line-height: 2;">
+          <li><a href="/features" class="has-text-inherit">Features</a></li>
+          <li><a href="/integrations" class="has-text-inherit">Integrations</a></li>
+          <li><a href="/pricing" class="has-text-inherit">Pricing</a></li>
+          <li><a href="/changelog" class="has-text-inherit">Changelog</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div class="column is-2">
+        <p class="heading has-text-weight-semibold mb-3">Resources</p>
+        <ul class="list-unstyled" style="line-height: 2;">
+          <li><a href="/docs" class="has-text-inherit">Documentation</a></li>
+          <li><a href="/blog" class="has-text-inherit">Blog</a></li>
+          <li><a href="/support" class="has-text-inherit">Support</a></li>
+          <li><a href="/terms" class="has-text-inherit">Privacy & Terms</a></li>
+        </ul>
+      </div>
+
+      <!-- Newsletter Form -->
+      <div class="column is-3">
+        <p class="heading has-text-weight-semibold mb-3">Stay Updated</p>
+        <p class="is-size-7 mb-3" style="opacity: 0.85;">Subscribe to our monthly engineering digest.</p>
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input class="input is-small" type="email" placeholder="you@domain.com">
+          </div>
+          <div class="control">
+            <button class="button is-small is-primary">Join</button>
+          </div>
+        </div>
+      </div>
+
     </div>
+
+    <hr style="opacity: 0.15; margin: 2rem 0 1.5rem 0;">
+
+    <!-- Bottom Copyright Line -->
+    <div class="level is-mobile is-size-7" style="opacity: 0.8;">
+      <div class="level-left">
+        <p>© {% now "Y" %} SoftGenie.org. All rights reserved.</p>
+      </div>
+      <div class="level-right">
+        <p>Built with Bulma</p>
+      </div>
+    </div>
+
+  </div>
 </footer>
