@@ -1,64 +1,154 @@
 {% extends 'base.html' %}
 {% load static %} 
-{% block title %}
-Softgenie - Login
-{% endblock %}
+
+{% block title %}Softgenie - Login{% endblock %}
 
 {% block content %}
-{% if messages %}
-{% for message in messages %}
-<div class="notification is-danger has-text-centered">
-    <span>{{ message }}</span>
-</div>
-{% endfor %}
-{% endif %}
 {% include 'header.html' %}
-<div class="section">
-    <div class="container">
-        <div class="columns is-centered">
-            <div class="column is-one-third">
-                <div class="box">
-                    <figure class="image is-128x128" style="margin: 0 auto;">
-                        <img src="{% static 'images/logo.png' %}" alt="SoftGenie Logo">
-                    </figure>
-                    <h2 class="title is-3 has-text-centered">
-                        Sign in to your account
-                    </h2>
-                    <form action="" method="POST">
-                        <p>Please create an account or login with existing account to make requests for APIs</p>
-                        {% csrf_token %}
-                        <input type="hidden" name="remember" value="true">
-                        <div class="field">
-                            <label class="label" for="username">Your Email</label>
-                            <div class="control">
-                                <input class="input" id="username" name="username" type="text" required placeholder="Enter Your Username">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label class="label" for="password">Password</label>
-                            <div class="control">
-                                <input class="input" id="password" name="password" type="password" autocomplete="current-password" required placeholder="Password">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="control">
-                                <button type="submit" class="button midnight-green-bg day-color is-fullwidth">
-                                    <span>Sign in</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <p class="has-text-centered">
-                                Not a member? <a href="{% url 'accounts:register' %}">Register here</a>
-                            </p>
-                        </div>
-                    </form>
-                </div>
+
+<style>
+  .auth-section {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    align-items: center;
+    background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
+  }
+  .auth-card {
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+    background-color: #ffffff;
+  }
+  .auth-logo {
+    max-height: 56px;
+    width: auto;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+  .auth-input:focus {
+    border-color: #004d40;
+    box-shadow: 0 0 0 0.125em rgba(0, 77, 64, 0.2);
+  }
+  .btn-submit {
+    background-color: #004d40;
+    color: #ffffff;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+  }
+  .btn-submit:hover {
+    background-color: #00332c;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 77, 64, 0.25);
+  }
+</style>
+
+<div class="auth-section py-6">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-10-tablet is-6-desktop is-4-widescreen">
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="notification is-danger is-light mb-4" style="border-radius: 8px;">
+              <button class="delete" onclick="this.parentElement.remove()"></button>
+              <div class="is-flex is-align-items-center">
+                <span class="icon mr-2">
+                  <i class="fas fa-exclamation-circle"></i>
+                </span>
+                <span class="is-size-7 has-text-weight-medium">{{ message }}</span>
+              </div>
             </div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="box auth-card p-5 p-6-desktop">
+          <!-- Logo & Header -->
+          <div class="has-text-centered mb-5">
+            <figure class="image mb-3 is-inline-block">
+              <img src="{% static 'images/logo.png' %}" alt="SoftGenie Logo" class="auth-logo">
+            </figure>
+            <h1 class="title is-4 has-text-dark mb-1 has-text-weight-bold">
+              Sign in to your account
+            </h1>
+            <p class="subtitle is-7 has-text-grey mt-1">
+              Access your dashboard to manage and request APIs
+            </p>
+          </div>
+
+          <!-- Form -->
+          <form action="" method="POST" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="remember" value="true">
+
+            <div class="field mb-4">
+              <label class="label is-small has-text-grey-dark" for="username">Username or Email</label>
+              <div class="control has-icons-left">
+                <input 
+                  class="input auth-input is-medium" 
+                  id="username" 
+                  name="username" 
+                  type="text" 
+                  required 
+                  placeholder="name@example.com"
+                  autocomplete="username"
+                >
+                <span class="icon is-small is-left has-text-grey-light">
+                  <i class="fas fa-envelope"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="field mb-4">
+              <div class="is-flex is-justify-content-space-between is-align-items-center mb-1">
+                <label class="label is-small has-text-grey-dark mb-0" for="password">Password</label>
+                {% if reset_url %}
+                  <a href="{{ reset_url }}" class="is-size-7 has-text-primary has-text-weight-medium">Forgot?</a>
+                {% endif %}
+              </div>
+              <div class="control has-icons-left">
+                <input 
+                  class="input auth-input is-medium" 
+                  id="password" 
+                  name="password" 
+                  type="password" 
+                  autocomplete="current-password" 
+                  required 
+                  placeholder="••••••••"
+                >
+                <span class="icon is-small is-left has-text-grey-light">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="field mt-5">
+              <div class="control">
+                <button type="submit" class="button btn-submit is-medium is-fullwidth">
+                  <span>Sign In</span>
+                  <span class="icon is-small ml-1">
+                    <i class="fas fa-arrow-right"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <hr class="my-4" style="background-color: #f3f4f6; height: 1px;">
+
+          <!-- Footer Switcher -->
+          <p class="has-text-centered is-size-7 has-text-grey">
+            Don't have an account? 
+            <a href="{% url 'accounts:register' %}" class="has-text-weight-semibold has-text-dark">
+              Register here
+            </a>
+          </p>
         </div>
+
+      </div>
     </div>
+  </div>
 </div>
+
 {% include 'footer.html' %}
 {% endblock %}
-
-

@@ -1,7 +1,10 @@
 {% load static %}
-<nav class="navbar night-color-bg day-color py-2 is-spaced has-shadow" role="navigation" aria-label="main navigation">
+<nav
+  class="navbar night-color-bg day-color py-2 is-spaced has-shadow"
+  role="navigation"
+  aria-label="main navigation"
+>
   <div class="container">
-    
     <!-- Brand / Logo & Mobile Burger -->
     <div class="navbar-brand">
       <a class="navbar-item has-text-weight-bold is-size-4" href="/">
@@ -10,7 +13,13 @@
       </a>
 
       <!-- Accessible Hamburger Menu for Mobile -->
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainNavbar">
+      <a
+        role="button"
+        class="navbar-burger"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="mainNavbar"
+      >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -23,49 +32,46 @@
       <div class="navbar-start">
         <a class="navbar-item" href="/features">Features</a>
         <a class="navbar-item" href="/pricing">Pricing</a>
-
-        <!-- Dropdown Example -->
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">Resources</a>
-          <div class="navbar-dropdown is-boxed">
-            <a class="navbar-item" href="/docs">Documentation</a>
-            <a class="navbar-item" href="/blog">Engineering Blog</a>
-            <hr class="navbar-divider">
-            <a class="navbar-item" href="/support">Help & Support</a>
-          </div>
-        </div>
       </div>
 
       <!-- Right Side Actions / CTA -->
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-ghost has-text-inherit" href="/login">
+            <a
+              class="button is-ghost has-text-inherit"
+              href="{% url 'accounts:login' %}"
+            >
               Log in
             </a>
-            <a class="button is-primary is-rounded has-text-weight-semibold" href="/signup">
+            <a
+              class="button is-primary is-rounded has-text-weight-semibold"
+              href="{% url 'accounts:register' %}"
+            >
               Get Started
             </a>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </nav>
 
 <!-- JavaScript to activate Bulma Mobile Burger Toggle -->
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+  document.addEventListener("DOMContentLoaded", () => {
+    const $navbarBurgers = Array.prototype.slice.call(
+      document.querySelectorAll(".navbar-burger"),
+      0,
+    );
 
-    $navbarBurgers.forEach(el => {
-      el.addEventListener('click', () => {
+    $navbarBurgers.forEach((el) => {
+      el.addEventListener("click", () => {
         const target = el.dataset.target;
         const $target = document.getElementById(target);
 
-        el.classList.toggle('is-active');
-        $target.classList.toggle('is-active');
+        el.classList.toggle("is-active");
+        $target.classList.toggle("is-active");
       });
     });
   });

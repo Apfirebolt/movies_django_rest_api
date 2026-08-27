@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 't55x2*!cyr@(wu80sc=85mg#p$$z*5r)#ypourwe2ga&$3c+p#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['206.81.29.244', 'localhost', 'http://softgenie.org', 'softgenie.org', 'www.softgenie.org']
 
