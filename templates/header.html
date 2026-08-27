@@ -38,18 +38,32 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a
-              class="button is-ghost has-text-inherit"
-              href="{% url 'accounts:login' %}"
-            >
-              Log in
-            </a>
-            <a
-              class="button is-primary is-rounded has-text-weight-semibold"
-              href="{% url 'accounts:register' %}"
-            >
-              Get Started
-            </a>
+            {% if user.is_authenticated %}
+              <!-- Logged-in User Email & Logout Action -->
+              <span class="navbar-item is-size-7 has-text-weight-medium has-text-primary">
+                {{ user.email }}
+              </span>
+              <form method="post" action="{% url 'accounts:logout' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="button is-ghost has-text-inherit">
+                  Log out
+                </button>
+              </form>
+            {% else %}
+              <!-- Guest Actions -->
+              <a
+                class="button is-ghost has-text-inherit"
+                href="{% url 'accounts:login' %}"
+              >
+                Log in
+              </a>
+              <a
+                class="button is-primary is-rounded has-text-weight-semibold"
+                href="{% url 'accounts:register' %}"
+              >
+                Get Started
+              </a>
+            {% endif %}
           </div>
         </div>
       </div>
