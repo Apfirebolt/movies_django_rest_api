@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from rest_framework.generics import (
     ListCreateAPIView,
     ListAPIView,
@@ -17,8 +18,10 @@ from .serializers import (
     ListPostImageSerializer,
     ListBlogImageSerializer,
     ListProjectSerializer,
+    DetailProjectSerializer,
     ListProjectImageSerializer,
     ListGalleryPostSerializer,
+    DetailGalleryPostSerializer,
     ListGalleryPostImageSerializer,
     TagsSerializer,
     GenericImageSerializer,
@@ -388,17 +391,35 @@ class CreateBlogPostApiView(CreateAPIView):
 
 
 class ListBlogPostApiView(ListAPIView):
-
     serializer_class = ListBlogPostSerializer
-    queryset = BlogPost.objects.all()
+    pagination_class = CustomPagination
     filter_backends = [
         DjangoFilterBackend,
         filters.OrderingFilter,
         filters.SearchFilter,
     ]
-    filterset_fields = ["title", "author"]
-    ordering_fields = ["date_posted", "title"]
-    search_fields = ["title", "author"]
+    filterset_fields = {
+        "title": ["exact", "icontains"],
+        "author": ["exact"],
+        "author__username": ["exact", "iexact"],
+        "is_published": ["exact"],
+    }
+    ordering_fields = ["date_posted", "title", "views"]
+    search_fields = ["title", "description", "content", "author__username"]
+
+    def get_queryset(self):
+        return (
+            BlogPost.objects.all()
+            .select_related("author")
+            .prefetch_related(
+                "tags",
+                Prefetch(
+                    "images",
+                    queryset=PostImage.objects.order_by("order", "id"),
+                ),
+            )
+            .order_by("-date_posted", "-id")
+        )
 
 
 class DetailBlogPostApiView(RetrieveUpdateDestroyAPIView):
@@ -455,9 +476,8 @@ class CreateBlogImageApiView(CreateAPIView):
 
 
 class ListProjectApiView(ListAPIView):
-
     serializer_class = ListProjectSerializer
-    queryset = Project.objects.all()
+    pagination_class = CustomPagination
     filter_backends = [
         DjangoFilterBackend,
         filters.OrderingFilter,
@@ -466,6 +486,17 @@ class ListProjectApiView(ListAPIView):
     filterset_fields = ["title", "author"]
     ordering_fields = ["date_posted", "title"]
     search_fields = ["title", "author"]
+
+    def get_queryset(self):
+        # Prefetch tags and images to avoid N+1 queries during serialization
+        return (
+            Project.objects.all()
+            .prefetch_related(
+                "tags",
+                "images",
+            )
+            .order_by("-id")
+        )
 
 
 class CreateProjectApiView(CreateAPIView):
@@ -485,19 +516,19 @@ class CreateProjectApiView(CreateAPIView):
 class ProjectDetailApiView(RetrieveUpdateDestroyAPIView):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = ListProjectSerializer
+    serializer_class = DetailProjectSerializer
     queryset = Project.objects.all()
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.views += 1
         instance.save()
-        serializer = ListProjectSerializer(instance)
+        serializer = DetailProjectSerializer(instance)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = ListProjectSerializer(instance, data=request.data)
+        serializer = DetailProjectSerializer(instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -563,17 +594,35 @@ class TagDetailApiView(RetrieveUpdateDestroyAPIView):
 
 
 class ListGalleryPostApiView(ListAPIView):
-
     serializer_class = ListGalleryPostSerializer
-    queryset = GalleryPost.objects.all()
+    pagination_class = CustomPagination
     filter_backends = [
         DjangoFilterBackend,
         filters.OrderingFilter,
         filters.SearchFilter,
     ]
-    filterset_fields = ["title", "author"]
-    ordering_fields = ["date_posted", "title"]
-    search_fields = ["title", "author"]
+    filterset_fields = {
+        "title": ["exact", "icontains"],
+        "author": ["exact"],
+        "author__username": ["exact", "iexact"],
+        "is_published": ["exact"],
+    }
+    ordering_fields = ["date_posted", "title", "views"]
+    search_fields = ["title", "description", "author__username"]
+
+    def get_queryset(self):
+        return (
+            GalleryPost.objects.all()
+            .select_related("author")
+            .prefetch_related(
+                "tags",
+                Prefetch(
+                    "images",
+                    queryset=GalleryPostImages.objects.order_by("order", "id"),
+                ),
+            )
+            .order_by("-date_posted", "-id")
+        )
 
 
 class CreateGalleryPostApiView(CreateAPIView):
@@ -593,19 +642,19 @@ class CreateGalleryPostApiView(CreateAPIView):
 class GalleryPostDetailApiView(RetrieveUpdateDestroyAPIView):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = ListGalleryPostSerializer
+    serializer_class = DetailGalleryPostSerializer
     queryset = GalleryPost.objects.all()
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.views += 1
         instance.save()
-        serializer = ListGalleryPostSerializer(instance)
+        serializer = DetailGalleryPostSerializer(instance)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = ListGalleryPostSerializer(instance, data=request.data)
+        serializer = DetailGalleryPostSerializer(instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

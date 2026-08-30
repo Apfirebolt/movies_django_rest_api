@@ -143,21 +143,38 @@ class TagListSerializer(serializers.ModelSerializer):
 
 
 class ListBlogSerializer(serializers.ModelSerializer):
-
     images = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
+    author_username = serializers.CharField(source="author.username", read_only=True)
 
     class Meta:
         model = Blog
-        fields = "__all__"
+        fields = [
+            "id",
+            "title",
+            "slug",
+            "description",
+            "author",
+            "author_username",
+            "date_posted",
+            "date_updated",
+            "is_published",
+            "views",
+            "tags",
+            "images",
+        ]
 
     def get_images(self, obj):
-        images = obj.images.all()
-        return ListBlogImageSerializer(images, many=True).data
+        # Cast to list before slicing to preserve the in-memory prefetch cache
+        images = list(obj.images.all())[:2]
+        return ListBlogImageSerializer(
+            images, many=True, context=self.context
+        ).data
 
     def get_tags(self, obj):
-        tags = obj.tags.all()
-        return TagListSerializer(tags, many=True).data
+        return TagListSerializer(
+            obj.tags.all(), many=True, context=self.context
+        ).data
 
 
 class ListBlogPostSerializer(serializers.ModelSerializer):
@@ -195,7 +212,26 @@ class ListProjectImageSerializer(serializers.ModelSerializer):
 
 
 class ListProjectSerializer(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
 
+    class Meta:
+        model = Project
+        fields = "__all__"
+
+    def get_images(self, obj):
+        # maximum of 2 images
+        images = obj.images.all()[:2]
+        return ListProjectImageSerializer(
+            images, many=True, context=self.context
+        ).data
+
+    def get_tags(self, obj):
+        tags = obj.tags.all()
+        return TagListSerializer(tags, many=True, context=self.context).data
+
+
+class DetailProjectSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
 
@@ -205,11 +241,13 @@ class ListProjectSerializer(serializers.ModelSerializer):
 
     def get_images(self, obj):
         images = obj.images.all()
-        return ListProjectImageSerializer(images, many=True).data
+        return ListProjectImageSerializer(
+            images, many=True, context=self.context
+        ).data
 
     def get_tags(self, obj):
         tags = obj.tags.all()
-        return TagListSerializer(tags, many=True).data
+        return TagListSerializer(tags, many=True, context=self.context).data
 
 
 class ListGalleryPostImageSerializer(serializers.ModelSerializer):
@@ -220,7 +258,26 @@ class ListGalleryPostImageSerializer(serializers.ModelSerializer):
 
 
 class ListGalleryPostSerializer(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
 
+    class Meta:
+        model = GalleryPost
+        fields = "__all__"
+
+    def get_images(self, obj):
+        images = list(obj.images.all())[:2]
+        return ListGalleryPostImageSerializer(
+            images, many=True, context=self.context
+        ).data
+
+    def get_tags(self, obj):
+        return TagListSerializer(
+            obj.tags.all(), many=True, context=self.context
+        ).data
+
+
+class DetailGalleryPostSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
 
@@ -230,11 +287,14 @@ class ListGalleryPostSerializer(serializers.ModelSerializer):
 
     def get_images(self, obj):
         images = obj.images.all()
-        return ListGalleryPostImageSerializer(images, many=True).data
+        return ListGalleryPostImageSerializer(
+            images, many=True, context=self.context
+        ).data
 
     def get_tags(self, obj):
-        tags = obj.tags.all()
-        return TagListSerializer(tags, many=True).data
+        return TagListSerializer(
+            obj.tags.all(), many=True, context=self.context
+        ).data
 
 
 class TagsSerializer(serializers.ModelSerializer):
