@@ -194,7 +194,7 @@ class ListBlogSerializer(serializers.ModelSerializer):
     @extend_schema_field(ListBlogImageSerializer(many=True))
     def get_images(self, obj):
         # Cast to list before slicing to preserve the in-memory prefetch cache
-        images = list(obj.images.all())[:2]
+        images = list(obj.images.all())[:3]
         return ListBlogImageSerializer(
             images, many=True, context=self.context
         ).data
@@ -224,7 +224,7 @@ class ListProjectSerializer(serializers.ModelSerializer):
     @extend_schema_field(ListProjectImageSerializer(many=True))
     def get_images(self, obj):
         # maximum of 2 images
-        images = obj.images.all()[:2]
+        images = obj.images.all()[:3]
         return ListProjectImageSerializer(
             images, many=True, context=self.context
         ).data
@@ -273,7 +273,7 @@ class ListGalleryPostSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(ListGalleryPostImageSerializer(many=True))
     def get_images(self, obj):
-        images = list(obj.images.all())[:2]
+        images = list(obj.images.all())[:3]
         return ListGalleryPostImageSerializer(
             images, many=True, context=self.context
         ).data
