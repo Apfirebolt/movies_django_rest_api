@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 from movie.models import Movie, Game, Netflix
 from accounts.models import CustomUser
 from ecommerce.models import Item
@@ -142,6 +143,34 @@ class TagListSerializer(serializers.ModelSerializer):
         fields = ("name",)
 
 
+
+class ListPostImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PostImage
+        fields = "__all__"
+
+class ListBlogPostSerializer(serializers.ModelSerializer):
+
+    images = serializers.SerializerMethodField()
+
+    class Meta:
+        model = BlogPost
+        fields = "__all__"
+
+    @extend_schema_field(ListPostImageSerializer(many=True))
+    def get_images(self, obj):
+        images = obj.images.all()
+        return ListPostImageSerializer(images, many=True).data
+    
+
+class ListBlogImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BlogImage
+        fields = "__all__"
+
+
 class ListBlogSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
@@ -152,18 +181,17 @@ class ListBlogSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "title",
-            "slug",
-            "description",
+            "content",
             "author",
             "author_username",
             "date_posted",
             "date_updated",
-            "is_published",
             "views",
             "tags",
             "images",
         ]
 
+    @extend_schema_field(ListBlogImageSerializer(many=True))
     def get_images(self, obj):
         # Cast to list before slicing to preserve the in-memory prefetch cache
         images = list(obj.images.all())[:2]
@@ -171,37 +199,11 @@ class ListBlogSerializer(serializers.ModelSerializer):
             images, many=True, context=self.context
         ).data
 
+    @extend_schema_field(TagListSerializer(many=True))
     def get_tags(self, obj):
         return TagListSerializer(
             obj.tags.all(), many=True, context=self.context
         ).data
-
-
-class ListBlogPostSerializer(serializers.ModelSerializer):
-
-    images = serializers.SerializerMethodField()
-
-    class Meta:
-        model = BlogPost
-        fields = "__all__"
-
-    def get_images(self, obj):
-        images = obj.images.all()
-        return ListPostImageSerializer(images, many=True).data
-
-
-class ListPostImageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = PostImage
-        fields = "__all__"
-
-
-class ListBlogImageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = BlogImage
-        fields = "__all__"
 
 
 class ListProjectImageSerializer(serializers.ModelSerializer):
@@ -219,6 +221,7 @@ class ListProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = "__all__"
 
+    @extend_schema_field(ListProjectImageSerializer(many=True))
     def get_images(self, obj):
         # maximum of 2 images
         images = obj.images.all()[:2]
@@ -226,6 +229,7 @@ class ListProjectSerializer(serializers.ModelSerializer):
             images, many=True, context=self.context
         ).data
 
+    @extend_schema_field(TagListSerializer(many=True))
     def get_tags(self, obj):
         tags = obj.tags.all()
         return TagListSerializer(tags, many=True, context=self.context).data
@@ -239,12 +243,14 @@ class DetailProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = "__all__"
 
+    @extend_schema_field(ListProjectImageSerializer(many=True))
     def get_images(self, obj):
         images = obj.images.all()
         return ListProjectImageSerializer(
             images, many=True, context=self.context
         ).data
 
+    @extend_schema_field(TagListSerializer(many=True))
     def get_tags(self, obj):
         tags = obj.tags.all()
         return TagListSerializer(tags, many=True, context=self.context).data
@@ -265,12 +271,14 @@ class ListGalleryPostSerializer(serializers.ModelSerializer):
         model = GalleryPost
         fields = "__all__"
 
+    @extend_schema_field(ListGalleryPostImageSerializer(many=True))
     def get_images(self, obj):
         images = list(obj.images.all())[:2]
         return ListGalleryPostImageSerializer(
             images, many=True, context=self.context
         ).data
 
+    @extend_schema_field(TagListSerializer(many=True))
     def get_tags(self, obj):
         return TagListSerializer(
             obj.tags.all(), many=True, context=self.context
@@ -285,12 +293,14 @@ class DetailGalleryPostSerializer(serializers.ModelSerializer):
         model = GalleryPost
         fields = "__all__"
 
+    @extend_schema_field(ListGalleryPostImageSerializer(many=True))
     def get_images(self, obj):
         images = obj.images.all()
         return ListGalleryPostImageSerializer(
             images, many=True, context=self.context
         ).data
 
+    @extend_schema_field(TagListSerializer(many=True))
     def get_tags(self, obj):
         return TagListSerializer(
             obj.tags.all(), many=True, context=self.context
