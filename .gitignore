@@ -36,3 +36,6 @@ logs
 
 # Ignore virtual environment
 venv
+
+# ignore tailwind binary
+tailwindcss
