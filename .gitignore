@@ -19,6 +19,7 @@ media
 # production
 /build
 /documentation
+staticfiles
 
 # misc
 **/__pycache__/
@@ -39,3 +40,5 @@ venv
 
 # ignore tailwind binary
 tailwindcss
+
+

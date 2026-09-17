@@ -281,6 +281,46 @@ Remember to replace <program_name> with the actual name of your program as defin
 
 These commands provide you with the basic tools to manage and monitor your processes using Supervisor. For a complete list of commands and their options, refer to the official Supervisor documentation.
 
+### Global Supervisor 
+
+This section would include a brief guide on how to setup supervisor globally and configure it to run your project.
+
+Make sure you have supervisor globally installed and you can access it from anywhere in the system using systemctl commands.
+
+1. Make sure a logs folder exist in your project directory.
+
+`sudo mkdir -p /home/movies_django_rest_api/logs`
+
+2. Add the program to global supervisor
+
+`
+sudo nano /etc/supervisor/conf.d/django_movie_api.conf
+`
+
+Paste the configuration file
+
+`
+[program:django_movie_api]
+command=/home/movies_django_rest_api/venv/bin/gunicorn django_movie_api.wsgi:application --bind 0.0.0.0:8000
+directory=/home/movies_django_rest_api
+autostart=true
+autorestart=true
+stderr_logfile=/home/movies_django_rest_api/logs/django_movie_api.err.log
+stdout_logfile=/home/movies_django_rest_api/logs/django_movie_api.out.log
+environment=DJANGO_SETTINGS_MODULE=django_movie_api.settings
+
+[group:django_movie_api]
+programs=django_movie_api
+`
+
+3. Tell supervisor to load this new app and restart
+
+`
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl status
+`
+
 ## Tailwind CLI Integration
 
 `
