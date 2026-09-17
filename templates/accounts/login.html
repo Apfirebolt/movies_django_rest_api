@@ -1,154 +1,126 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 {% load static %} 
 
 {% block title %}Softgenie - Login{% endblock %}
 
 {% block content %}
-{% include 'header.html' %}
+<div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between">
+  
+  {% include 'header.html' %}
 
-<style>
-  .auth-section {
-    min-height: calc(100vh - 160px);
-    display: flex;
-    align-items: center;
-    background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
-  }
-  .auth-card {
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
-    background-color: #ffffff;
-  }
-  .auth-logo {
-    max-height: 56px;
-    width: auto;
-    object-fit: contain;
-    margin: 0 auto;
-  }
-  .auth-input:focus {
-    border-color: #004d40;
-    box-shadow: 0 0 0 0.125em rgba(0, 77, 64, 0.2);
-  }
-  .btn-submit {
-    background-color: #004d40;
-    color: #ffffff;
-    font-weight: 600;
-    transition: all 0.2s ease-in-out;
-  }
-  .btn-submit:hover {
-    background-color: #00332c;
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 77, 64, 0.25);
-  }
-</style>
+  <main class="flex-grow flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md mx-auto">
 
-<div class="auth-section py-6">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-10-tablet is-6-desktop is-4-widescreen">
-
-        {% if messages %}
+      <!-- Messages Alert if any -->
+      {% if messages %}
+        <div class="mb-6 space-y-3">
           {% for message in messages %}
-            <div class="notification is-danger is-light mb-4" style="border-radius: 8px;">
-              <button class="delete" onclick="this.parentElement.remove()"></button>
-              <div class="is-flex is-align-items-center">
-                <span class="icon mr-2">
-                  <i class="fas fa-exclamation-circle"></i>
-                </span>
-                <span class="is-size-7 has-text-weight-medium">{{ message }}</span>
+            <div class="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-sm flex items-center justify-between shadow-sm">
+              <div class="flex items-center gap-2.5">
+                <i class="fas fa-exclamation-circle text-rose-400 flex-shrink-0"></i>
+                <span class="font-medium">{{ message }}</span>
               </div>
+              <button onclick="this.parentElement.remove()" class="text-rose-400 hover:text-rose-300 text-xs font-bold px-1.5 py-0.5 rounded">&times;</button>
             </div>
           {% endfor %}
-        {% endif %}
+        </div>
+      {% endif %}
 
-        <div class="box auth-card p-5 p-6-desktop">
-          <!-- Logo & Header -->
-          <div class="has-text-centered mb-5">
-            <figure class="image mb-3 is-inline-block">
-              <img src="{% static 'images/logo.png' %}" alt="SoftGenie Logo" class="auth-logo">
-            </figure>
-            <h1 class="title is-4 has-text-dark mb-1 has-text-weight-bold">
-              Sign in to your account
-            </h1>
-            <p class="subtitle is-7 has-text-grey mt-1">
-              Access your dashboard to manage and request APIs
-            </p>
+      <!-- Auth Card Box -->
+      <div class="bg-slate-900 border border-slate-800 shadow-2xl rounded-3xl p-8 sm:p-10 backdrop-blur-xl">
+        
+        <!-- Logo & Header -->
+        <div class="text-center mb-8">
+          <div class="inline-block mb-4">
+            <img src="{% static 'images/logo.png' %}" alt="SoftGenie Logo" class="h-12 w-auto object-contain mx-auto">
           </div>
-
-          <!-- Form -->
-          <form action="" method="POST" novalidate>
-            {% csrf_token %}
-            <input type="hidden" name="remember" value="true">
-
-            <div class="field mb-4">
-              <label class="label is-small has-text-grey-dark" for="username">Username or Email</label>
-              <div class="control has-icons-left">
-                <input 
-                  class="input auth-input is-medium" 
-                  id="username" 
-                  name="username" 
-                  type="text" 
-                  required 
-                  placeholder="name@example.com"
-                  autocomplete="username"
-                >
-                <span class="icon is-small is-left has-text-grey-light">
-                  <i class="fas fa-envelope"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="field mb-4">
-              <div class="is-flex is-justify-content-space-between is-align-items-center mb-1">
-                <label class="label is-small has-text-grey-dark mb-0" for="password">Password</label>
-                {% if reset_url %}
-                  <a href="{{ reset_url }}" class="is-size-7 has-text-primary has-text-weight-medium">Forgot?</a>
-                {% endif %}
-              </div>
-              <div class="control has-icons-left">
-                <input 
-                  class="input auth-input is-medium" 
-                  id="password" 
-                  name="password" 
-                  type="password" 
-                  autocomplete="current-password" 
-                  required 
-                  placeholder="••••••••"
-                >
-                <span class="icon is-small is-left has-text-grey-light">
-                  <i class="fas fa-lock"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="field mt-5">
-              <div class="control">
-                <button type="submit" class="button btn-submit is-medium is-fullwidth">
-                  <span>Sign In</span>
-                  <span class="icon is-small ml-1">
-                    <i class="fas fa-arrow-right"></i>
-                  </span>
-                </button>
-              </div>
-            </div>
-          </form>
-
-          <hr class="my-4" style="background-color: #f3f4f6; height: 1px;">
-
-          <!-- Footer Switcher -->
-          <p class="has-text-centered is-size-7 has-text-grey">
-            Don't have an account? 
-            <a href="{% url 'accounts:register' %}" class="has-text-weight-semibold has-text-dark">
-              Register here
-            </a>
+          <h1 class="text-2xl font-bold text-white tracking-tight mb-2">
+            Sign in to your account
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-400">
+            Access your dashboard to manage and request APIs
           </p>
         </div>
 
-      </div>
-    </div>
-  </div>
-</div>
+        <!-- Form -->
+        <form action="" method="POST" novalidate class="space-y-5">
+          {% csrf_token %}
+          <input type="hidden" name="remember" value="true">
 
-{% include 'footer.html' %}
+          <!-- Username / Email Field -->
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2" for="username">
+              Username or Email
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-500">
+                <i class="fas fa-envelope text-sm"></i>
+              </span>
+              <input 
+                class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition" 
+                id="username" 
+                name="username" 
+                type="text" 
+                required 
+                placeholder="name@example.com"
+                autocomplete="username"
+              >
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300" for="password">
+                Password
+              </label>
+              {% if reset_url %}
+                <a href="{{ reset_url }}" class="text-xs text-brand-light hover:underline font-medium">Forgot?</a>
+              {% endif %}
+            </div>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-500">
+                <i class="fas fa-lock text-sm"></i>
+              </span>
+              <input 
+                class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition" 
+                id="password" 
+                name="password" 
+                type="password" 
+                autocomplete="current-password" 
+                required 
+                placeholder="••••••••"
+              >
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-2">
+            <button 
+              type="submit" 
+              class="w-full bg-primary hover:bg-indigo-900 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-md hover:shadow-lg transition-all text-sm flex items-center justify-center gap-2 group"
+            >
+              <span>Sign In</span>
+              <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+            </button>
+          </div>
+        </form>
+
+        <hr class="border-slate-800 my-8">
+
+        <!-- Footer Switcher -->
+        <p class="text-center text-xs text-slate-400">
+          Don't have an account? 
+          <a href="{% url 'accounts:register' %}" class="text-white font-semibold hover:underline ml-1">
+            Register here
+          </a>
+        </p>
+
+      </div>
+
+    </div>
+  </main>
+
+  {% include 'footer.html' %}
+</div>
 {% endblock %}
