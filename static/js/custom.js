@@ -1,4 +1,1 @@
-$(function() {
-    // Handler for .ready() called.
-    console.log('custom.js loaded');
-   });
+console.log('custom.js loaded');

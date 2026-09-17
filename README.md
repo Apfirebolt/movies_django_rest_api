@@ -281,6 +281,21 @@ Remember to replace <program_name> with the actual name of your program as defin
 
 These commands provide you with the basic tools to manage and monitor your processes using Supervisor. For a complete list of commands and their options, refer to the official Supervisor documentation.
 
+## Tailwind CLI Integration
+
+`
+curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64
+`
+
+Rename the folder, add it to gitignore file
+
+`
+chmod +x tailwindcss
+
+./tailwindcss -i ./static/css/input.css -o ./static/css/output.css --minify
+`
+
+
 ## Contributing
 
 1. Fork the repository
