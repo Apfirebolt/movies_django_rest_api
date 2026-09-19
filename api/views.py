@@ -1,4 +1,7 @@
 from django.db.models import Prefetch
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from rest_framework.generics import (
     ListCreateAPIView,
     ListAPIView,
@@ -68,11 +71,11 @@ class CreateCustomUserApiView(CreateAPIView):
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
-    # Replace the serializer with your custom
     serializer_class = CustomTokenObtainPairSerializer
     permission_classes = []
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListCustomUsersApiView(ListAPIView):
     serializer_class = ListCustomUserSerializer
     queryset = CustomUser.objects.all()
@@ -87,6 +90,7 @@ class ListCustomUsersApiView(ListAPIView):
     search_fields = ["username", "email"]
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListMovieApiView(ListAPIView):
     serializer_class = ListMovieSerializer
     queryset = Movie.objects.all()
@@ -109,6 +113,7 @@ class DetailMovieApiView(RetrieveUpdateDestroyAPIView):
     serializer_class = ListMovieSerializer
     queryset = Movie.objects.all()
 
+    @method_decorator(cache_page(60 * 15))
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = ListMovieSerializer(instance)
@@ -128,8 +133,8 @@ class DetailMovieApiView(RetrieveUpdateDestroyAPIView):
         return Response(status=204)
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListGameApiView(ListAPIView):
-
     serializer_class = ListGameSerializer
     queryset = Game.objects.all()
     pagination_class = CustomPagination
@@ -144,11 +149,11 @@ class ListGameApiView(ListAPIView):
 
 
 class DetailGameApiView(RetrieveUpdateDestroyAPIView):
-
     serializer_class = ListGameSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Game.objects.all()
 
+    @method_decorator(cache_page(60 * 15))
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = ListGameSerializer(instance)
@@ -169,8 +174,8 @@ class DetailGameApiView(RetrieveUpdateDestroyAPIView):
 
 
 # Netflix API
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListNetflixApiView(ListAPIView):
-
     serializer_class = ListNetflixSerializer
     queryset = Netflix.objects.all()
     pagination_class = CustomPagination
@@ -185,6 +190,7 @@ class ListNetflixApiView(ListAPIView):
 
 
 # Ecommerce API
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListItemApiView(ListAPIView):
     serializer_class = ListItemsSerializer
     queryset = Item.objects.all()
@@ -204,6 +210,7 @@ class ListItemApiView(ListAPIView):
 
 
 # Funds API
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListFundApiView(ListAPIView):
     serializer_class = ListFundSerializer
     queryset = Fund.objects.all()
@@ -219,6 +226,7 @@ class ListFundApiView(ListAPIView):
 
 
 # Dinosaur API
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListDinosaurApiView(ListAPIView):
     serializer_class = ListDinosaurSerializer
     queryset = Dinosaur.objects.all()
@@ -244,6 +252,7 @@ class ListDinosaurApiView(ListAPIView):
 
 
 # Planets API
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListPlanetApiView(ListAPIView):
     serializer_class = ListPlanetSerializer
     queryset = Planet.objects.all()
@@ -269,6 +278,7 @@ class PlanetDetailApiView(RetrieveAPIView):
     serializer_class = ListPlanetSerializer
     queryset = Planet.objects.all()
 
+    @method_decorator(cache_page(60 * 15))
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.views += 1
@@ -278,6 +288,7 @@ class PlanetDetailApiView(RetrieveAPIView):
 
 
 # Books API
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListBookApiView(ListAPIView):
     serializer_class = ListBookSerializer
     queryset = Book.objects.all()
@@ -293,11 +304,11 @@ class ListBookApiView(ListAPIView):
 
 
 class BookDetailApiView(RetrieveUpdateDestroyAPIView):
-
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ListBookSerializer
     queryset = Book.objects.all()
 
+    @method_decorator(cache_page(60 * 15))
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.views += 1
@@ -305,8 +316,22 @@ class BookDetailApiView(RetrieveUpdateDestroyAPIView):
         serializer = ListBookSerializer(instance)
         return Response(serializer.data)
 
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ListBookSerializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=204)
+
 
 # Lyrics API
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListLyricsApiView(ListAPIView):
     serializer_class = ListLyricsSerializer
     queryset = Lyrics.objects.all()
@@ -321,8 +346,8 @@ class ListLyricsApiView(ListAPIView):
     search_fields = ["title", "singer", "composer", "lyrics"]
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListBlogApiView(ListAPIView):
-
     serializer_class = ListBlogSerializer
     queryset = Blog.objects.all()
     filter_backends = [
@@ -336,7 +361,6 @@ class ListBlogApiView(ListAPIView):
 
 
 class CreateBlogApiView(CreateAPIView):
-
     serializer_class = ListBlogSerializer
     queryset = Blog.objects.all()
     permission_classes = [IsAuthenticated]
@@ -345,16 +369,17 @@ class CreateBlogApiView(CreateAPIView):
         serializer = ListBlogSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on create
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
 
 class DetailBlogApiView(RetrieveUpdateDestroyAPIView):
-
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ListBlogSerializer
     queryset = Blog.objects.all()
 
+    @method_decorator(cache_page(60 * 15))
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.views += 1
@@ -367,17 +392,18 @@ class DetailBlogApiView(RetrieveUpdateDestroyAPIView):
         serializer = ListBlogSerializer(instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on update
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
+        cache.clear()  # Invalidate cache on delete
         return Response(status=204)
 
 
 class CreateBlogPostApiView(CreateAPIView):
-
     serializer_class = ListBlogPostSerializer
     queryset = BlogPost.objects.all()
     permission_classes = [IsAuthenticated]
@@ -386,10 +412,12 @@ class CreateBlogPostApiView(CreateAPIView):
         serializer = ListBlogPostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on create
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListBlogPostApiView(ListAPIView):
     serializer_class = ListBlogPostSerializer
     pagination_class = CustomPagination
@@ -423,11 +451,11 @@ class ListBlogPostApiView(ListAPIView):
 
 
 class DetailBlogPostApiView(RetrieveUpdateDestroyAPIView):
-
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ListBlogPostSerializer
     queryset = BlogPost.objects.all()
 
+    @method_decorator(cache_page(60 * 15))
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = ListBlogPostSerializer(instance)
@@ -438,17 +466,18 @@ class DetailBlogPostApiView(RetrieveUpdateDestroyAPIView):
         serializer = ListBlogPostSerializer(instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on update
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
+        cache.clear()  # Invalidate cache on delete
         return Response(status=204)
 
 
 class CreatePostImageApiView(CreateAPIView):
-
     serializer_class = ListPostImageSerializer
     queryset = PostImage.objects.all()
     permission_classes = [IsAuthenticated]
@@ -457,12 +486,12 @@ class CreatePostImageApiView(CreateAPIView):
         serializer = ListPostImageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on image creation
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
 
 class CreateBlogImageApiView(CreateAPIView):
-
     serializer_class = ListBlogImageSerializer
     queryset = BlogImage.objects.all()
     permission_classes = []
@@ -471,10 +500,12 @@ class CreateBlogImageApiView(CreateAPIView):
         serializer = ListBlogImageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListProjectApiView(ListAPIView):
     serializer_class = ListProjectSerializer
     pagination_class = CustomPagination
@@ -488,7 +519,6 @@ class ListProjectApiView(ListAPIView):
     search_fields = ["title", "author"]
 
     def get_queryset(self):
-        # Prefetch tags and images to avoid N+1 queries during serialization
         return (
             Project.objects.all()
             .prefetch_related(
@@ -500,7 +530,6 @@ class ListProjectApiView(ListAPIView):
 
 
 class CreateProjectApiView(CreateAPIView):
-
     serializer_class = ListProjectSerializer
     queryset = Project.objects.all()
     permission_classes = [IsAuthenticated]
@@ -509,16 +538,17 @@ class CreateProjectApiView(CreateAPIView):
         serializer = ListProjectSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on create
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
 
 class ProjectDetailApiView(RetrieveUpdateDestroyAPIView):
-
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = DetailProjectSerializer
     queryset = Project.objects.all()
 
+    @method_decorator(cache_page(60 * 15))
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.views += 1
@@ -531,17 +561,18 @@ class ProjectDetailApiView(RetrieveUpdateDestroyAPIView):
         serializer = DetailProjectSerializer(instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on update
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
+        cache.clear()  # Invalidate cache on delete
         return Response(status=204)
 
 
 class AddProjectImageApiView(CreateAPIView):
-
     serializer_class = ListProjectImageSerializer
     queryset = ProjectImages.objects.all()
     permission_classes = [IsAuthenticated]
@@ -550,12 +581,12 @@ class AddProjectImageApiView(CreateAPIView):
         serializer = ListProjectImageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on image addition
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
 
 class ListCreateTagsApiView(ListCreateAPIView):
-
     serializer_class = TagsSerializer
     queryset = Tags.objects.all()
     permission_classes = [IsAuthenticated]
@@ -569,11 +600,11 @@ class ListCreateTagsApiView(ListCreateAPIView):
 
 
 class TagDetailApiView(RetrieveUpdateDestroyAPIView):
-
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = TagsSerializer
     queryset = Tags.objects.all()
 
+    @method_decorator(cache_page(60 * 15))
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = TagsSerializer(instance)
@@ -593,6 +624,7 @@ class TagDetailApiView(RetrieveUpdateDestroyAPIView):
         return Response(status=204)
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListGalleryPostApiView(ListAPIView):
     serializer_class = ListGalleryPostSerializer
     pagination_class = CustomPagination
@@ -626,7 +658,6 @@ class ListGalleryPostApiView(ListAPIView):
 
 
 class CreateGalleryPostApiView(CreateAPIView):
-
     serializer_class = ListGalleryPostSerializer
     queryset = GalleryPost.objects.all()
     permission_classes = [IsAuthenticated]
@@ -635,16 +666,17 @@ class CreateGalleryPostApiView(CreateAPIView):
         serializer = ListGalleryPostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on create
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
 
 class GalleryPostDetailApiView(RetrieveUpdateDestroyAPIView):
-
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = DetailGalleryPostSerializer
     queryset = GalleryPost.objects.all()
 
+    @method_decorator(cache_page(60 * 15))
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.views += 1
@@ -657,17 +689,18 @@ class GalleryPostDetailApiView(RetrieveUpdateDestroyAPIView):
         serializer = DetailGalleryPostSerializer(instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on update
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
+        cache.clear()  # Invalidate cache on delete
         return Response(status=204)
 
 
 class AddGalleryPostImageApiView(CreateAPIView):
-
     serializer_class = ListGalleryPostImageSerializer
     queryset = GalleryPostImages.objects.all()
     permission_classes = [IsAuthenticated]
@@ -676,12 +709,13 @@ class AddGalleryPostImageApiView(CreateAPIView):
         serializer = ListGalleryPostImageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            cache.clear()  # Invalidate cache on image addition
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class GenericImageListApiView(ListAPIView):
-
     serializer_class = GenericImageSerializer
     queryset = GenericImage.objects.all()
     permission_classes = [IsAuthenticated]

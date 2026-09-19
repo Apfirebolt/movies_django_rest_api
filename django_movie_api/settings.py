@@ -172,6 +172,18 @@ SIMPLE_JWT = {
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://default:{os.getenv('REDIS_PASSWORD')}@{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Optional: Set default cache timeout (e.g., 15 minutes = 900 seconds)
+CACHE_MIDDLEWARE_SECONDS = 900
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
