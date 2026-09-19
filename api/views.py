@@ -50,7 +50,13 @@ from movie.models import Movie, Game, Netflix
 from planets.models import Planet
 from books.models import Book
 from lyrics.models import Lyrics
-from blog.caching import KEY_PREFIX, warm_projects_cache
+from blog.caching import (
+    KEY_DETAIL_PREFIX,
+    get_optimized_projects_queryset,
+    warm_project_detail_cache,
+    KEY_PREFIX,
+    warm_projects_list_cache
+)
 from blog.gallery_caching import (
     GALLERY_PAGE_PREFIX,
     GALLERY_DETAIL_PREFIX,
@@ -554,7 +560,7 @@ class ListProjectApiView(ListAPIView):
             if cached_payload is not None:
                 return Response(cached_payload)
 
-            warm_projects_cache()
+            warm_projects_list_cache()
             cached_payload = cache.get(cache_key)
             if cached_payload is not None:
                 return Response(cached_payload)
@@ -579,30 +585,45 @@ class CreateProjectApiView(CreateAPIView):
 class ProjectDetailApiView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = DetailProjectSerializer
-    queryset = Project.objects.all()
 
-    @method_decorator(cache_page(60 * 15))
+    def get_queryset(self):
+        # Uses single-trip joined queries for author, tags, and ordered images
+        return get_optimized_projects_queryset()
+
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.views += 1
-        instance.save()
-        serializer = DetailProjectSerializer(instance)
-        return Response(serializer.data)
+        project_id = self.kwargs.get("pk") or self.kwargs.get("id")
+        cache_key = f"{KEY_DETAIL_PREFIX}{project_id}"
+
+        # Increment view count atomically without taking an exclusive full-row lock
+        Project.objects.filter(pk=project_id).update(views=F("views") + 1)
+
+        # 1. Instant Cache Hit (< 5ms)
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
+        # 2. Cold-start fallback: warm cache and return
+        cached_data = warm_project_detail_cache(project_id)
+        if cached_data is not None:
+            return Response(cached_data)
+
+        # 3. Standard 404 handler if the record doesn't exist
+        return super().retrieve(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
+        # Cache invalidation & re-warming is automatically handled by the post_save signal
+        partial = kwargs.pop("partial", False)
         instance = self.get_object()
-        serializer = DetailProjectSerializer(instance, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            cache.clear()  # Invalidate cache on update
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
+        # Cache invalidation & re-warming is automatically handled by the post_delete signal
         instance = self.get_object()
-        instance.delete()
-        cache.clear()  # Invalidate cache on delete
-        return Response(status=204)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AddProjectImageApiView(CreateAPIView):
