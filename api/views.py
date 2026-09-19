@@ -521,9 +521,13 @@ class ListProjectApiView(ListAPIView):
     def get_queryset(self):
         return (
             Project.objects.all()
+            .select_related("author")
             .prefetch_related(
                 "tags",
-                "images",
+                Prefetch(
+                    "images",
+                    queryset=ProjectImages.objects.order_by("id"),
+                ),
             )
             .order_by("-id")
         )
