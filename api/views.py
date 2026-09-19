@@ -1,4 +1,4 @@
-from django.db.models import Prefetch
+from django.db.models import Prefetch, F
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
@@ -51,6 +51,13 @@ from planets.models import Planet
 from books.models import Book
 from lyrics.models import Lyrics
 from blog.caching import KEY_PREFIX, warm_projects_cache
+from blog.gallery_caching import (
+    GALLERY_PAGE_PREFIX,
+    GALLERY_DETAIL_PREFIX,
+    get_optimized_gallery_queryset,
+    warm_gallery_list_cache,
+    warm_gallery_detail_cache,
+)
 from blog.models import (
     Blog,
     BlogPost,
@@ -650,7 +657,6 @@ class TagDetailApiView(RetrieveUpdateDestroyAPIView):
         return Response(status=204)
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListGalleryPostApiView(ListAPIView):
     serializer_class = ListGalleryPostSerializer
     pagination_class = CustomPagination
@@ -669,18 +675,31 @@ class ListGalleryPostApiView(ListAPIView):
     search_fields = ["title", "description", "author__username"]
 
     def get_queryset(self):
-        return (
-            GalleryPost.objects.all()
-            .select_related("author")
-            .prefetch_related(
-                "tags",
-                Prefetch(
-                    "images",
-                    queryset=GalleryPostImages.objects.order_by("order", "id"),
-                ),
-            )
-            .order_by("-date_posted", "-id")
+        return get_optimized_gallery_queryset()
+
+    def list(self, request, *args, **kwargs):
+        query_params = request.query_params
+
+        # Standard navigation requests (e.g. no query params or only ?page=X)
+        non_page_params = [k for k in query_params.keys() if k != "page"]
+        is_default_request = len(non_page_params) == 0 and not (
+            request.user.is_authenticated and request.user.is_staff
         )
+
+        if is_default_request:
+            page_num = query_params.get("page", "1")
+            cache_key = f"{GALLERY_PAGE_PREFIX}{page_num}"
+            cached_data = cache.get(cache_key)
+
+            if cached_data is not None:
+                return Response(cached_data)
+
+            warm_gallery_list_cache()
+            cached_data = cache.get(cache_key)
+            if cached_data is not None:
+                return Response(cached_data)
+            
+        return super().list(request, *args, **kwargs)
 
 
 class CreateGalleryPostApiView(CreateAPIView):
@@ -700,30 +719,52 @@ class CreateGalleryPostApiView(CreateAPIView):
 class GalleryPostDetailApiView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = DetailGalleryPostSerializer
-    queryset = GalleryPost.objects.all()
 
-    @method_decorator(cache_page(60 * 15))
+    def get_queryset(self):
+        return (
+            GalleryPost.objects.all()
+            .select_related("author")
+            .prefetch_related(
+                "tags",
+                Prefetch(
+                    "images",
+                    queryset=GalleryPostImages.objects.order_by("order", "id"),
+                ),
+            )
+        )
+
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.views += 1
-        instance.save()
-        serializer = DetailGalleryPostSerializer(instance)
-        return Response(serializer.data)
+        post_id = self.kwargs.get("pk") or self.kwargs.get("id")
+        cache_key = f"{GALLERY_DETAIL_PREFIX}{post_id}"
+
+        # Atomic counter increment without full row lock
+        GalleryPost.objects.filter(pk=post_id).update(views=F("views") + 1)
+
+        # 1. Instant Cache Hit (< 5ms)
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+        
+        cached_data = warm_gallery_detail_cache(post_id)
+        if cached_data is not None:
+            return Response(cached_data)
+
+        return super().retrieve(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
+        # Cache invalidation & re-warming is automatically handled by post_save signal
+        partial = kwargs.pop("partial", False)
         instance = self.get_object()
-        serializer = DetailGalleryPostSerializer(instance, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            cache.clear()  # Invalidate cache on update
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
+        # Cache invalidation & re-warming is automatically handled by post_delete signal
         instance = self.get_object()
-        instance.delete()
-        cache.clear()  # Invalidate cache on delete
-        return Response(status=204)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AddGalleryPostImageApiView(CreateAPIView):
