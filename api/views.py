@@ -50,6 +50,7 @@ from movie.models import Movie, Game, Netflix
 from planets.models import Planet
 from books.models import Book
 from lyrics.models import Lyrics
+from blog.caching import KEY_PREFIX, warm_projects_cache
 from blog.models import (
     Blog,
     BlogPost,
@@ -505,7 +506,6 @@ class CreateBlogImageApiView(CreateAPIView):
         return Response(serializer.errors, status=400)
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListProjectApiView(ListAPIView):
     serializer_class = ListProjectSerializer
     pagination_class = CustomPagination
@@ -531,6 +531,28 @@ class ListProjectApiView(ListAPIView):
             )
             .order_by("-id")
         )
+
+    def list(self, request, *args, **kwargs):
+        query_params = request.query_params
+
+        non_page_params = [k for k in query_params.keys() if k != "page"]
+        is_default_request = len(non_page_params) == 0
+
+        if is_default_request:
+            page_number = query_params.get("page", "1")
+            cache_key = f"{KEY_PREFIX}{page_number}"
+            cached_payload = cache.get(cache_key)
+
+            # 1. Instant Cache Hit (< 5ms)
+            if cached_payload is not None:
+                return Response(cached_payload)
+
+            warm_projects_cache()
+            cached_payload = cache.get(cache_key)
+            if cached_payload is not None:
+                return Response(cached_payload)
+
+        return super().list(request, *args, **kwargs)
 
 
 class CreateProjectApiView(CreateAPIView):
