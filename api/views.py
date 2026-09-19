@@ -50,6 +50,13 @@ from movie.models import Movie, Game, Netflix
 from planets.models import Planet
 from books.models import Book
 from lyrics.models import Lyrics
+from blog.blog_caching import (
+    BLOG_PAGE_PREFIX,
+    BLOG_DETAIL_PREFIX,
+    get_optimized_blog_queryset,
+    warm_blog_list_cache,
+    warm_blog_detail_cache,
+)
 from blog.caching import (
     KEY_DETAIL_PREFIX,
     get_optimized_projects_queryset,
@@ -431,7 +438,6 @@ class CreateBlogPostApiView(CreateAPIView):
         return Response(serializer.errors, status=400)
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
 class ListBlogPostApiView(ListAPIView):
     serializer_class = ListBlogPostSerializer
     pagination_class = CustomPagination
@@ -450,45 +456,73 @@ class ListBlogPostApiView(ListAPIView):
     search_fields = ["title", "description", "content", "author__username"]
 
     def get_queryset(self):
-        return (
-            BlogPost.objects.all()
-            .select_related("author")
-            .prefetch_related(
-                "tags",
-                Prefetch(
-                    "images",
-                    queryset=PostImage.objects.order_by("order", "id"),
-                ),
-            )
-            .order_by("-date_posted", "-id")
+        return get_optimized_blog_queryset()
+
+    def list(self, request, *args, **kwargs):
+        query_params = request.query_params
+
+        # Standard navigation requests without dynamic filters/search
+        non_page_params = [k for k in query_params.keys() if k != "page"]
+        is_default_request = len(non_page_params) == 0 and not (
+            request.user.is_authenticated and request.user.is_staff
         )
+
+        if is_default_request:
+            page_num = query_params.get("page", "1")
+            cache_key = f"{BLOG_PAGE_PREFIX}{page_num}"
+            cached_data = cache.get(cache_key)
+
+            if cached_data is not None:
+                return Response(cached_data)
+
+            # Cold fallback: warm list cache once and retry
+            warm_blog_list_cache()
+            cached_data = cache.get(cache_key)
+            if cached_data is not None:
+                return Response(cached_data)
+
+        return super().list(request, *args, **kwargs)
 
 
 class DetailBlogPostApiView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ListBlogPostSerializer
-    queryset = BlogPost.objects.all()
 
-    @method_decorator(cache_page(60 * 15))
+    def get_queryset(self):
+        # Uses single-trip joined queries for author, blog, tags, and ordered images
+        return get_optimized_blog_queryset()
+
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = ListBlogPostSerializer(instance)
-        return Response(serializer.data)
+        post_id = self.kwargs.get("pk") or self.kwargs.get("id")
+        cache_key = f"{BLOG_DETAIL_PREFIX}{post_id}"
+
+        # 1. Instant Cache Hit (< 5ms)
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
+        # 2. Cold-start fallback: warm cache and return
+        cached_data = warm_blog_detail_cache(post_id)
+        if cached_data is not None:
+            return Response(cached_data)
+
+        # 3. Standard 404 handler if the record doesn't exist
+        return super().retrieve(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
+        # Cache invalidation & re-warming is automatically handled by the post_save signal
+        partial = kwargs.pop("partial", False)
         instance = self.get_object()
-        serializer = ListBlogPostSerializer(instance, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            cache.clear()  # Invalidate cache on update
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
+        # Cache invalidation & re-warming is automatically handled by the post_delete signal
         instance = self.get_object()
-        instance.delete()
-        cache.clear()  # Invalidate cache on delete
-        return Response(status=204)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CreatePostImageApiView(CreateAPIView):
